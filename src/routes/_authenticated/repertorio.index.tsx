@@ -6,21 +6,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { db, run, useInvalidate, useMe } from "@/lib/band";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FormDialog, PageHeader, type Field } from "@/components/band/ui";
+import { FormDialog, PageHeader } from "@/components/band/ui";
+import { songFields } from "@/components/band/fields";
 
 export const Route = createFileRoute("/_authenticated/repertorio/")({
   head: () => ({ meta: [{ title: "Repertório — Banda Jana Lima" }] }),
   component: Repertorio,
 });
 
-export const songFields: Field[] = [
-  { name: "titulo", label: "Título", required: true },
-  { name: "artista", label: "Artista original" },
-  { name: "tom", label: "Tom (da Jana)", placeholder: "Ex: A, F#m" },
-  { name: "bpm", label: "BPM", type: "number" },
-  { name: "youtube_url", label: "Link YouTube (versão original)", type: "url" },
-  { name: "observacoes", label: "Observações (emendas, breques, convenções)", type: "textarea" },
-];
 
 function Repertorio() {
   const { data: me } = useMe();

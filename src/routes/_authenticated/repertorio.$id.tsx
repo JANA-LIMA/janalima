@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { db, embedUrl, fmtDate, fmtTime, run, useInvalidate, useMe } from "@/lib/band";
 import { Button } from "@/components/ui/button";
 import { Empty, FormDialog, Panel, YouTube } from "@/components/band/ui";
-import { songFields } from "./repertorio.index";
+import { songFields } from "@/components/band/fields";
 
 export const Route = createFileRoute("/_authenticated/repertorio/$id")({
   head: () => ({ meta: [{ title: "Música — Banda Jana Lima" }] }),

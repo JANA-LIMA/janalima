@@ -18,6 +18,8 @@ import { Route as AuthenticatedBlocosIndexRouteImport } from './routes/_authenti
 import { Route as AuthenticatedBlocosIdRouteImport } from './routes/_authenticated/blocos.$id'
 import { Route as AuthenticatedRepertorioIndexRouteImport } from './routes/_authenticated/repertorio.index'
 import { Route as AuthenticatedRepertorioIdRouteImport } from './routes/_authenticated/repertorio.$id'
+import { Route as AuthenticatedShowsIndexRouteImport } from './routes/_authenticated/shows.index'
+import { Route as AuthenticatedShowsIdRouteImport } from './routes/_authenticated/shows.$id'
 import { Route as AuthenticatedVideosIndexRouteImport } from './routes/_authenticated/videos.index'
 import { Route as AuthenticatedVideosIdRouteImport } from './routes/_authenticated/videos.$id'
 
@@ -68,6 +70,16 @@ const AuthenticatedRepertorioIdRoute =
     path: '/repertorio/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedShowsIndexRoute = AuthenticatedShowsIndexRouteImport.update({
+  id: '/shows/',
+  path: '/shows/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedShowsIdRoute = AuthenticatedShowsIdRouteImport.update({
+  id: '/shows/$id',
+  path: '/shows/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedVideosIndexRoute =
   AuthenticatedVideosIndexRouteImport.update({
     id: '/videos/',
@@ -87,9 +99,11 @@ export interface FileRoutesByFullPath {
   '/musicos': typeof AuthenticatedMusicosRoute
   '/blocos/$id': typeof AuthenticatedBlocosIdRoute
   '/repertorio/$id': typeof AuthenticatedRepertorioIdRoute
+  '/shows/$id': typeof AuthenticatedShowsIdRoute
   '/videos/$id': typeof AuthenticatedVideosIdRoute
   '/blocos/': typeof AuthenticatedBlocosIndexRoute
   '/repertorio/': typeof AuthenticatedRepertorioIndexRoute
+  '/shows/': typeof AuthenticatedShowsIndexRoute
   '/videos/': typeof AuthenticatedVideosIndexRoute
 }
 export interface FileRoutesByTo {
@@ -99,9 +113,11 @@ export interface FileRoutesByTo {
   '/musicos': typeof AuthenticatedMusicosRoute
   '/blocos/$id': typeof AuthenticatedBlocosIdRoute
   '/repertorio/$id': typeof AuthenticatedRepertorioIdRoute
+  '/shows/$id': typeof AuthenticatedShowsIdRoute
   '/videos/$id': typeof AuthenticatedVideosIdRoute
   '/blocos': typeof AuthenticatedBlocosIndexRoute
   '/repertorio': typeof AuthenticatedRepertorioIndexRoute
+  '/shows': typeof AuthenticatedShowsIndexRoute
   '/videos': typeof AuthenticatedVideosIndexRoute
 }
 export interface FileRoutesById {
@@ -113,9 +129,11 @@ export interface FileRoutesById {
   '/_authenticated/musicos': typeof AuthenticatedMusicosRoute
   '/_authenticated/blocos/$id': typeof AuthenticatedBlocosIdRoute
   '/_authenticated/repertorio/$id': typeof AuthenticatedRepertorioIdRoute
+  '/_authenticated/shows/$id': typeof AuthenticatedShowsIdRoute
   '/_authenticated/videos/$id': typeof AuthenticatedVideosIdRoute
   '/_authenticated/blocos/': typeof AuthenticatedBlocosIndexRoute
   '/_authenticated/repertorio/': typeof AuthenticatedRepertorioIndexRoute
+  '/_authenticated/shows/': typeof AuthenticatedShowsIndexRoute
   '/_authenticated/videos/': typeof AuthenticatedVideosIndexRoute
 }
 export interface FileRouteTypes {
@@ -127,9 +145,11 @@ export interface FileRouteTypes {
     | '/musicos'
     | '/blocos/$id'
     | '/repertorio/$id'
+    | '/shows/$id'
     | '/videos/$id'
     | '/blocos/'
     | '/repertorio/'
+    | '/shows/'
     | '/videos/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -139,9 +159,11 @@ export interface FileRouteTypes {
     | '/musicos'
     | '/blocos/$id'
     | '/repertorio/$id'
+    | '/shows/$id'
     | '/videos/$id'
     | '/blocos'
     | '/repertorio'
+    | '/shows'
     | '/videos'
   id:
     | '__root__'
@@ -152,9 +174,11 @@ export interface FileRouteTypes {
     | '/_authenticated/musicos'
     | '/_authenticated/blocos/$id'
     | '/_authenticated/repertorio/$id'
+    | '/_authenticated/shows/$id'
     | '/_authenticated/videos/$id'
     | '/_authenticated/blocos/'
     | '/_authenticated/repertorio/'
+    | '/_authenticated/shows/'
     | '/_authenticated/videos/'
   fileRoutesById: FileRoutesById
 }
@@ -229,6 +253,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepertorioIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/shows/': {
+      id: '/_authenticated/shows/'
+      path: '/shows'
+      fullPath: '/shows/'
+      preLoaderRoute: typeof AuthenticatedShowsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/shows/$id': {
+      id: '/_authenticated/shows/$id'
+      path: '/shows/$id'
+      fullPath: '/shows/$id'
+      preLoaderRoute: typeof AuthenticatedShowsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/videos/': {
       id: '/_authenticated/videos/'
       path: '/videos'
@@ -251,9 +289,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMusicosRoute: typeof AuthenticatedMusicosRoute
   AuthenticatedBlocosIdRoute: typeof AuthenticatedBlocosIdRoute
   AuthenticatedRepertorioIdRoute: typeof AuthenticatedRepertorioIdRoute
+  AuthenticatedShowsIdRoute: typeof AuthenticatedShowsIdRoute
   AuthenticatedVideosIdRoute: typeof AuthenticatedVideosIdRoute
   AuthenticatedBlocosIndexRoute: typeof AuthenticatedBlocosIndexRoute
   AuthenticatedRepertorioIndexRoute: typeof AuthenticatedRepertorioIndexRoute
+  AuthenticatedShowsIndexRoute: typeof AuthenticatedShowsIndexRoute
   AuthenticatedVideosIndexRoute: typeof AuthenticatedVideosIndexRoute
 }
 
@@ -262,9 +302,11 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMusicosRoute: AuthenticatedMusicosRoute,
   AuthenticatedBlocosIdRoute: AuthenticatedBlocosIdRoute,
   AuthenticatedRepertorioIdRoute: AuthenticatedRepertorioIdRoute,
+  AuthenticatedShowsIdRoute: AuthenticatedShowsIdRoute,
   AuthenticatedVideosIdRoute: AuthenticatedVideosIdRoute,
   AuthenticatedBlocosIndexRoute: AuthenticatedBlocosIndexRoute,
   AuthenticatedRepertorioIndexRoute: AuthenticatedRepertorioIndexRoute,
+  AuthenticatedShowsIndexRoute: AuthenticatedShowsIndexRoute,
   AuthenticatedVideosIndexRoute: AuthenticatedVideosIndexRoute,
 }
 

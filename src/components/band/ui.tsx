@@ -56,7 +56,7 @@ export function StatusBadge({ status }: { status: string }) {
     recusado: ["Recusado", <X key="x" className="size-3" />, "bg-destructive/15 text-destructive"],
     pendente: ["Pendente", <Clock key="p" className="size-3" />, "bg-sun/15 text-sun"],
   };
-  const [label, icon, cls] = map[status] ?? map.pendente;
+  const [label, icon, cls] = (map[status] ?? map["pendente"])!;
   return (
     <span className={cn("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold", cls)}>
       {icon}
@@ -100,7 +100,8 @@ export function FormDialog({
   title: string;
   fields: Field[];
   initial?: Values;
-  onSubmit: (v: Values) => Promise<void>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSubmit: (v: any) => Promise<void>;
 }) {
   const [open, setOpen] = useState(false);
   const [vals, setVals] = useState<Values>(initial ?? {});
@@ -199,8 +200,8 @@ export function FormDialog({
   );
 }
 
-function SortRow({ id, children, disabled }: { id: string; children: ReactNode; disabled?: boolean }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id, disabled });
+function SortRow({ id, children, disabled }: { id: string; children: ReactNode; disabled?: boolean | undefined }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id, disabled: !!disabled });
   return (
     <li
       ref={setNodeRef}

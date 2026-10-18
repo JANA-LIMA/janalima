@@ -57,10 +57,10 @@ export function useMe() {
 }
 
 /** Run a supabase query and throw on error. */
-export async function run<T>(p: PromiseLike<{ data: T; error: unknown }>): Promise<T> {
+export async function run<T>(p: PromiseLike<{ data: T; error: unknown }>): Promise<NonNullable<T>> {
   const { data, error } = await p;
   if (error) throw error;
-  return data;
+  return data as NonNullable<T>;
 }
 
 export function useInvalidate() {
@@ -95,7 +95,7 @@ export function parseTime(v: string) {
 
 export function fmtDate(d?: string | null) {
   if (!d) return "";
-  const [y, m, day] = d.split("-").map(Number);
+  const [y = 0, m = 1, day = 1] = d.split("-").map(Number);
   return new Date(y, m - 1, day).toLocaleDateString("pt-BR", {
     weekday: "short",
     day: "2-digit",

@@ -14,8 +14,12 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedInicioRouteImport } from './routes/_authenticated/inicio'
 import { Route as AuthenticatedMusicosRouteImport } from './routes/_authenticated/musicos'
+import { Route as AuthenticatedBlocosIndexRouteImport } from './routes/_authenticated/blocos.index'
+import { Route as AuthenticatedBlocosIdRouteImport } from './routes/_authenticated/blocos.$id'
 import { Route as AuthenticatedRepertorioIndexRouteImport } from './routes/_authenticated/repertorio.index'
 import { Route as AuthenticatedRepertorioIdRouteImport } from './routes/_authenticated/repertorio.$id'
+import { Route as AuthenticatedVideosIndexRouteImport } from './routes/_authenticated/videos.index'
+import { Route as AuthenticatedVideosIdRouteImport } from './routes/_authenticated/videos.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -41,6 +45,17 @@ const AuthenticatedMusicosRoute = AuthenticatedMusicosRouteImport.update({
   path: '/musicos',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedBlocosIndexRoute =
+  AuthenticatedBlocosIndexRouteImport.update({
+    id: '/blocos/',
+    path: '/blocos/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedBlocosIdRoute = AuthenticatedBlocosIdRouteImport.update({
+  id: '/blocos/$id',
+  path: '/blocos/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRepertorioIndexRoute =
   AuthenticatedRepertorioIndexRouteImport.update({
     id: '/repertorio/',
@@ -53,22 +68,41 @@ const AuthenticatedRepertorioIdRoute =
     path: '/repertorio/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedVideosIndexRoute =
+  AuthenticatedVideosIndexRouteImport.update({
+    id: '/videos/',
+    path: '/videos/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedVideosIdRoute = AuthenticatedVideosIdRouteImport.update({
+  id: '/videos/$id',
+  path: '/videos/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/inicio': typeof AuthenticatedInicioRoute
   '/musicos': typeof AuthenticatedMusicosRoute
+  '/blocos/$id': typeof AuthenticatedBlocosIdRoute
   '/repertorio/$id': typeof AuthenticatedRepertorioIdRoute
+  '/videos/$id': typeof AuthenticatedVideosIdRoute
+  '/blocos/': typeof AuthenticatedBlocosIndexRoute
   '/repertorio/': typeof AuthenticatedRepertorioIndexRoute
+  '/videos/': typeof AuthenticatedVideosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/inicio': typeof AuthenticatedInicioRoute
   '/musicos': typeof AuthenticatedMusicosRoute
+  '/blocos/$id': typeof AuthenticatedBlocosIdRoute
   '/repertorio/$id': typeof AuthenticatedRepertorioIdRoute
+  '/videos/$id': typeof AuthenticatedVideosIdRoute
+  '/blocos': typeof AuthenticatedBlocosIndexRoute
   '/repertorio': typeof AuthenticatedRepertorioIndexRoute
+  '/videos': typeof AuthenticatedVideosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,15 +111,38 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/inicio': typeof AuthenticatedInicioRoute
   '/_authenticated/musicos': typeof AuthenticatedMusicosRoute
+  '/_authenticated/blocos/$id': typeof AuthenticatedBlocosIdRoute
   '/_authenticated/repertorio/$id': typeof AuthenticatedRepertorioIdRoute
+  '/_authenticated/videos/$id': typeof AuthenticatedVideosIdRoute
+  '/_authenticated/blocos/': typeof AuthenticatedBlocosIndexRoute
   '/_authenticated/repertorio/': typeof AuthenticatedRepertorioIndexRoute
+  '/_authenticated/videos/': typeof AuthenticatedVideosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/inicio' | '/musicos' | '/repertorio/$id' | '/repertorio/'
+    | '/'
+    | '/auth'
+    | '/inicio'
+    | '/musicos'
+    | '/blocos/$id'
+    | '/repertorio/$id'
+    | '/videos/$id'
+    | '/blocos/'
+    | '/repertorio/'
+    | '/videos/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/inicio' | '/musicos' | '/repertorio/$id' | '/repertorio'
+  to:
+    | '/'
+    | '/auth'
+    | '/inicio'
+    | '/musicos'
+    | '/blocos/$id'
+    | '/repertorio/$id'
+    | '/videos/$id'
+    | '/blocos'
+    | '/repertorio'
+    | '/videos'
   id:
     | '__root__'
     | '/'
@@ -93,8 +150,12 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/inicio'
     | '/_authenticated/musicos'
+    | '/_authenticated/blocos/$id'
     | '/_authenticated/repertorio/$id'
+    | '/_authenticated/videos/$id'
+    | '/_authenticated/blocos/'
     | '/_authenticated/repertorio/'
+    | '/_authenticated/videos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -140,6 +201,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMusicosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/blocos/': {
+      id: '/_authenticated/blocos/'
+      path: '/blocos'
+      fullPath: '/blocos/'
+      preLoaderRoute: typeof AuthenticatedBlocosIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/blocos/$id': {
+      id: '/_authenticated/blocos/$id'
+      path: '/blocos/$id'
+      fullPath: '/blocos/$id'
+      preLoaderRoute: typeof AuthenticatedBlocosIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/repertorio/': {
       id: '/_authenticated/repertorio/'
       path: '/repertorio'
@@ -154,21 +229,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRepertorioIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/videos/': {
+      id: '/_authenticated/videos/'
+      path: '/videos'
+      fullPath: '/videos/'
+      preLoaderRoute: typeof AuthenticatedVideosIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/videos/$id': {
+      id: '/_authenticated/videos/$id'
+      path: '/videos/$id'
+      fullPath: '/videos/$id'
+      preLoaderRoute: typeof AuthenticatedVideosIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedInicioRoute: typeof AuthenticatedInicioRoute
   AuthenticatedMusicosRoute: typeof AuthenticatedMusicosRoute
+  AuthenticatedBlocosIdRoute: typeof AuthenticatedBlocosIdRoute
   AuthenticatedRepertorioIdRoute: typeof AuthenticatedRepertorioIdRoute
+  AuthenticatedVideosIdRoute: typeof AuthenticatedVideosIdRoute
+  AuthenticatedBlocosIndexRoute: typeof AuthenticatedBlocosIndexRoute
   AuthenticatedRepertorioIndexRoute: typeof AuthenticatedRepertorioIndexRoute
+  AuthenticatedVideosIndexRoute: typeof AuthenticatedVideosIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedInicioRoute: AuthenticatedInicioRoute,
   AuthenticatedMusicosRoute: AuthenticatedMusicosRoute,
+  AuthenticatedBlocosIdRoute: AuthenticatedBlocosIdRoute,
   AuthenticatedRepertorioIdRoute: AuthenticatedRepertorioIdRoute,
+  AuthenticatedVideosIdRoute: AuthenticatedVideosIdRoute,
+  AuthenticatedBlocosIndexRoute: AuthenticatedBlocosIndexRoute,
   AuthenticatedRepertorioIndexRoute: AuthenticatedRepertorioIndexRoute,
+  AuthenticatedVideosIndexRoute: AuthenticatedVideosIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

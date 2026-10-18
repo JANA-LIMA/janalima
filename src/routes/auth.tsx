@@ -7,13 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-type Search = { email?: string; modo?: string };
+type Search = { email?: string | undefined; modo?: string | undefined };
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
   validateSearch: (s: Record<string, unknown>): Search => ({
-    email: typeof s.email === "string" ? s.email : undefined,
-    modo: typeof s.modo === "string" ? s.modo : undefined,
+    email: typeof s["email"] === "string" ? s["email"] : undefined,
+    modo: typeof s["modo"] === "string" ? s["modo"] : undefined,
   }),
   head: () => ({
     meta: [
@@ -69,7 +69,10 @@ function AuthPage() {
   };
 
   const magic = async () => {
-    if (!email) return toast.error("Digite seu e-mail");
+    if (!email) {
+      toast.error("Digite seu e-mail");
+      return;
+    }
     setBusy(true);
     const { error } = await supabase.auth.signInWithOtp({
       email,

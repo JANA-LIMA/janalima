@@ -104,7 +104,7 @@ function ShowPage() {
           : [`${i + 1}. ${it.songs?.titulo}${it.songs?.tom ? ` (${it.songs.tom})` : ""} — avulsa`],
       ),
       show.observacoes ? `\n📝 ${show.observacoes}` : "",
-    ].filter((l) => l !== null && l !== undefined && l !== false) as string[];
+    ].filter((l): l is string => typeof l === "string");
     window.open(`https://wa.me/?text=${encodeURIComponent(lines.join("\n"))}`, "_blank");
   };
 

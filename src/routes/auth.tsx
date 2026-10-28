@@ -85,6 +85,17 @@ function AuthPage() {
 
   return (
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden px-6 py-10">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+        <iframe
+          title="Jana Lima ao vivo"
+          src="https://www.youtube-nocookie.com/embed/Znp-FIG15dI?autoplay=1&mute=1&loop=1&playlist=Znp-FIG15dI&controls=0&showinfo=0&modestbranding=1&playsinline=1&rel=0&iv_load_policy=3&disablekb=1"
+          allow="autoplay; encrypted-media"
+          tabIndex={-1}
+          className="absolute top-1/2 left-1/2 h-[max(100vh,56.25vw)] w-[max(100vw,177.78vh)] -translate-x-1/2 -translate-y-1/2 border-0"
+        />
+        <div className="absolute inset-0 bg-background/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-primary/20" />
+      </div>
       <div className="pointer-events-none absolute -top-32 -right-24 size-80 rounded-full bg-gradient-axe opacity-30 blur-3xl" />
       <div className="relative mx-auto w-full max-w-sm">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sun">Axé · Banda</p>

@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { db, fmtDate, run, today, useInvalidate, useMe } from "@/lib/band";
 import { Button } from "@/components/ui/button";
-import { Empty, FormDialog, PageHeader, StatusBadge } from "@/components/band/ui";
+import { Empty, FormDialog, PageHeader } from "@/components/band/ui";
 import { showFields } from "@/components/band/fields";
 
 export const Route = createFileRoute("/_authenticated/shows/")({
@@ -61,7 +61,6 @@ function Shows() {
       {data.length === 0 && <Empty>Nenhum show aqui.</Empty>}
       <ul className="space-y-2">
         {data.map((s) => {
-          const mine = s.show_lineup.find((l) => l.musician_id === me?.musicianId);
           const [, m, d] = s.data.split("-");
           return (
             <li key={s.id}>
@@ -74,11 +73,7 @@ function Shows() {
                   <p className="truncate font-semibold">{s.nome}</p>
                   <p className="truncate text-xs text-muted-foreground">{fmtDate(s.data)} · {s.local}</p>
                 </div>
-                {mine ? (
-                  <StatusBadge status={mine.status} />
-                ) : (
-                  me?.isAdmin && <span className="text-xs text-muted-foreground">{s.show_lineup.filter((l) => l.status === "confirmado").length}/{s.show_lineup.length}</span>
-                )}
+                {me?.isAdmin && <span className="text-xs text-muted-foreground">{s.show_lineup.length} músicos</span>}
               </Link>
             </li>
           );

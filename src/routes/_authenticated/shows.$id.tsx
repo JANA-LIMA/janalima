@@ -5,7 +5,7 @@ import { CalendarDays, Clock, Layers, MapPin, Music2, Pencil, Plus, Shirt, Trash
 import { supabase } from "@/integrations/supabase/client";
 import { db, fmtDate, hhmm, INSTRUMENTOS, run, useInvalidate, useMe } from "@/lib/band";
 import { Button } from "@/components/ui/button";
-import { ConfirmButtons, Empty, FormDialog, Panel, SortableList, StatusBadge } from "@/components/band/ui";
+import { Empty, FormDialog, Panel, SortableList } from "@/components/band/ui";
 import { rehearsalFields, showFields } from "@/components/band/fields";
 
 export const Route = createFileRoute("/_authenticated/shows/$id")({
@@ -52,7 +52,7 @@ function ShowPage() {
       run(
         supabase
           .from("rehearsals")
-          .select("*,rehearsal_attendance(id,status,musician_id,musicians(nome))")
+          .select("*")
           .eq("show_id", id)
           .order("data"),
       ),
@@ -73,7 +73,6 @@ function ShowPage() {
   if (isLoading) return null;
   if (!show) return <Empty>Show não encontrado ou seu acesso expirou.</Empty>;
 
-  const mine = lineup.find((l) => l.musician_id === me?.musicianId);
 
   const reorder = async (next: SetItem[]) => {
     setItems(next);
@@ -178,18 +177,6 @@ function ShowPage() {
         </Panel>
       )}
 
-      {mine && (
-        <Panel className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-sm font-semibold">Sua presença: <StatusBadge status={mine.status} /></div>
-          <ConfirmButtons
-            status={mine.status}
-            onSet={async (s) => {
-              await db.rpc("responder_show", { _lineup: mine.id, _status: s });
-              inv();
-            }}
-          />
-        </Panel>
-      )}
 
       <Button variant="hero" className="w-full" onClick={share}>
         <Share2 /> Compartilhar no WhatsApp
@@ -268,7 +255,7 @@ function ShowPage() {
 
       <section>
         <h2 className="mb-2 text-xl font-bold">Escalação</h2>
-        {lineup.length === 0 && <Empty>Ninguém escalado ainda.</Empty>}
+        {lineup.length === 0 && <Empty>Ninguém no show.</Empty>}
         <div className="space-y-3">
           {grouped.map((g) => (
             <div key={g.ins}>
@@ -278,11 +265,10 @@ function ShowPage() {
                   <li key={l.id} className="flex items-center justify-between rounded-xl border bg-card px-3 py-2 text-sm">
                     <span className="font-semibold">{l.musicians?.nome}</span>
                     <span className="flex items-center gap-2">
-                      <StatusBadge status={l.status} />
                       {admin && (
                         <button
                           className="text-muted-foreground"
-                          aria-label="Remover"
+                          aria-label="Remover do show"
                           onClick={async () => {
                             await db.from("show_lineup").delete().eq("id", l.id);
                             inv();
@@ -301,7 +287,7 @@ function ShowPage() {
         {admin && opts && (
           <div className="mt-3">
             <FormDialog
-              title="Escalar músico"
+              title="Adicionar integrante"
               fields={[
                 {
                   name: "musician_id",
@@ -314,7 +300,7 @@ function ShowPage() {
                     .map((m) => ({ value: m.id, label: `${m.instrumento} — ${m.nome}` })),
                 },
               ]}
-              trigger={<Button variant="outline" className="w-full"><Plus /> Escalar músico</Button>}
+              trigger={<Button variant="outline" className="w-full"><Plus /> Adicionar integrante</Button>}
               onSubmit={async (v) => {
                 const { error } = await db.from("show_lineup").insert({ show_id: id, musician_id: v.musician_id });
                 if (error) throw error;
@@ -330,7 +316,6 @@ function ShowPage() {
         {ensaios.length === 0 && <Empty>Nenhum ensaio marcado.</Empty>}
         <div className="space-y-3">
           {ensaios.map((e) => {
-            const myAtt = e.rehearsal_attendance.find((a) => a.musician_id === me?.musicianId);
             return (
               <Panel key={e.id}>
                 <div className="flex items-start justify-between gap-2">
@@ -366,27 +351,6 @@ function ShowPage() {
                     </div>
                   )}
                 </div>
-                {myAtt && (
-                  <div className="mt-3 flex flex-wrap items-center gap-3">
-                    <StatusBadge status={myAtt.status} />
-                    <ConfirmButtons
-                      status={myAtt.status}
-                      onSet={async (s) => {
-                        await db.rpc("responder_ensaio", { _att: myAtt.id, _status: s });
-                        inv();
-                      }}
-                    />
-                  </div>
-                )}
-                {admin && e.rehearsal_attendance.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {e.rehearsal_attendance.map((a) => (
-                      <span key={a.id} className="flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-xs">
-                        {a.musicians?.nome} <StatusBadge status={a.status} />
-                      </span>
-                    ))}
-                  </div>
-                )}
               </Panel>
             );
           })}

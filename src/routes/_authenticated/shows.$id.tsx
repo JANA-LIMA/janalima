@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { CalendarDays, Clock, Layers, MapPin, Music2, Pencil, Plus, Shirt, Trash2, Truck, Mic2, Share2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { db, fmtDate, hhmm, INSTRUMENTOS, run, useInvalidate, useMe } from "@/lib/band";
+import { db, fmtDate, hhmm, run, useInvalidate, useMe } from "@/lib/band";
 import { Button } from "@/components/ui/button";
 import { Empty, FormDialog, Panel, SortableList } from "@/components/band/ui";
 import { rehearsalFields, showFields } from "@/components/band/fields";
@@ -41,10 +41,6 @@ function ShowPage() {
           .eq("show_id", id)
           .order("position"),
       ),
-  });
-  const { data: lineup = [] } = useQuery({
-    queryKey: ["lineup", id],
-    queryFn: () => run(supabase.from("show_lineup").select("id,status,musician_id,musicians(nome,instrumento)").eq("show_id", id)),
   });
   const { data: ensaios = [] } = useQuery({
     queryKey: ["ensaios", id],
@@ -107,10 +103,6 @@ function ShowPage() {
     window.open(`https://wa.me/?text=${encodeURIComponent(lines.join("\n"))}`, "_blank");
   };
 
-  const grouped = INSTRUMENTOS.map((ins) => ({
-    ins,
-    list: lineup.filter((l) => l.musicians?.instrumento === ins),
-  })).filter((g) => g.list.length);
 
   return (
     <div className="space-y-6">
@@ -251,63 +243,22 @@ function ShowPage() {
             />
           </div>
         )}
-      </section>
-
-      <section>
-        <h2 className="mb-2 text-xl font-bold">Escalação</h2>
-        {lineup.length === 0 && <Empty>Ninguém no show.</Empty>}
-        <div className="space-y-3">
-          {grouped.map((g) => (
-            <div key={g.ins}>
-              <p className="mb-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">{g.ins}</p>
-              <ul className="space-y-1.5">
-                {g.list.map((l) => (
-                  <li key={l.id} className="flex items-center justify-between rounded-xl border bg-card px-3 py-2 text-sm">
-                    <span className="font-semibold">{l.musicians?.nome}</span>
-                    <span className="flex items-center gap-2">
-                      {admin && (
-                        <button
-                          className="text-muted-foreground"
-                          aria-label="Remover do show"
-                          onClick={async () => {
-                            await db.from("show_lineup").delete().eq("id", l.id);
-                            inv();
-                          }}
-                        >
-                          <Trash2 className="size-4" />
-                        </button>
-                      )}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
         {admin && opts && (
-          <div className="mt-3">
-            <FormDialog
-              title="Adicionar integrante"
-              fields={[
-                {
-                  name: "musician_id",
-                  label: "Músico",
-                  type: "select",
-                  required: true,
-                  options: [...opts.musicians]
-                    .filter((m) => !lineup.some((l) => l.musician_id === m.id))
-                    .sort((a, b) => INSTRUMENTOS.indexOf(a.instrumento) - INSTRUMENTOS.indexOf(b.instrumento))
-                    .map((m) => ({ value: m.id, label: `${m.instrumento} — ${m.nome}` })),
-                },
-              ]}
-              trigger={<Button variant="outline" className="w-full"><Plus /> Adicionar integrante</Button>}
-              onSubmit={async (v) => {
-                const { error } = await db.from("show_lineup").insert({ show_id: id, musician_id: v.musician_id });
-                if (error) throw error;
-                inv();
-              }}
-            />
-          </div>
+          <Button
+            variant="hero"
+            className="mt-2 w-full"
+            onClick={async () => {
+              if (items.length && !confirm("Substituir o setlist atual pelo repertório completo?")) return;
+              await db.from("setlist_items").delete().eq("show_id", id);
+              const { error } = await db
+                .from("setlist_items")
+                .insert(opts.blocks.map((b, i) => ({ show_id: id, block_id: b.id, position: i })));
+              if (error) throw error;
+              inv();
+            }}
+          >
+            <Layers /> Usar repertório completo
+          </Button>
         )}
       </section>
 

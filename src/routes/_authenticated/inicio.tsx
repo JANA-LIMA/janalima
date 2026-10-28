@@ -110,7 +110,7 @@ function Inicio() {
                           <p className="font-semibold">{s.nome}</p>
                           <p className="text-xs text-muted-foreground">{fmtDate(s.data)} · {s.local}</p>
                         </div>
-                        <span className="text-xs font-semibold text-muted-foreground">{s.show_lineup.length} músicos</span>
+
                       </Link>
                     </li>
                   );

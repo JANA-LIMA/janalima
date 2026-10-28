@@ -101,7 +101,7 @@ function AuthPage() {
         alt="Jana Lima"
         width={720}
         height={1332}
-        className="mask-fade-bottom pointer-events-none absolute bottom-0 left-1/2 h-[58vh] w-auto -translate-x-1/2 md:left-[5%] md:h-[94vh] md:translate-x-0"
+        className="mask-fade-bottom pointer-events-none absolute top-[12vh] left-1/2 h-[72vh] w-auto -translate-x-1/2 md:top-auto md:bottom-0 md:left-[5%] md:h-[94vh] md:translate-x-0"
       />
 
       {/* coluna: marca + acesso */}

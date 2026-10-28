@@ -42,6 +42,8 @@
   --color-sidebar-accent-foreground: var(--foreground);
   --color-sidebar-border: var(--border);
   --color-sidebar-ring: var(--ring);
+  --color-orchid: var(--orchid);
+  --color-orchid-deep: var(--orchid-deep);
 }
 
 :root {

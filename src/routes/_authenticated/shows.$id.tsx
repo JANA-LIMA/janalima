@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { CalendarDays, Clock, Layers, MapPin, Music2, Pencil, Plus, Shirt, Trash2, Truck, Mic2, Share2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { db, fmtDate, hhmm, INSTRUMENTOS, run, useInvalidate, useMe } from "@/lib/band";
+import { db, fmtDate, hhmm, run, useInvalidate, useMe } from "@/lib/band";
 import { Button } from "@/components/ui/button";
 import { Empty, FormDialog, Panel, SortableList } from "@/components/band/ui";
 import { rehearsalFields, showFields } from "@/components/band/fields";

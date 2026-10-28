@@ -73,7 +73,7 @@ function Shows() {
                   <p className="truncate font-semibold">{s.nome}</p>
                   <p className="truncate text-xs text-muted-foreground">{fmtDate(s.data)} · {s.local}</p>
                 </div>
-                {me?.isAdmin && <span className="text-xs text-muted-foreground">{s.show_lineup.length} músicos</span>}
+
               </Link>
             </li>
           );

@@ -18,8 +18,7 @@ const fields: Field[] = [
   { name: "instrumento", label: "Instrumento", type: "select", required: true, options: INSTRUMENTOS.map((i) => ({ value: i, label: i })) },
   { name: "whatsapp", label: "WhatsApp", placeholder: "71999998888" },
   { name: "email", label: "E-mail", type: "email" },
-  { name: "tipo", label: "Tipo", type: "select", required: true, options: [{ value: "fixo", label: "Fixo" }, { value: "freela", label: "Freela" }] },
-  { name: "ativo", label: "Ativo", type: "checkbox" },
+  { name: "ativo", label: "Acesso ao app liberado", type: "checkbox" },
 ];
 
 function Musicos() {
@@ -40,13 +39,13 @@ function Musicos() {
     <div>
       <PageHeader
         title="Músicos"
-        sub={`${data.filter((m) => m.ativo).length} ativos`}
+        sub={`${data.filter((m) => m.ativo).length} com acesso`}
         action={
           me?.isAdmin && (
             <FormDialog
               title="Novo músico"
               fields={fields}
-              initial={{ tipo: "freela", ativo: true }}
+              initial={{ tipo: "fixo", ativo: true }}
               trigger={<Button variant="hero" size="sm"><Plus /> Novo</Button>}
               onSubmit={async (v) => {
                 const { error } = await db.from("musicians").insert(v);
@@ -58,7 +57,7 @@ function Musicos() {
         }
       />
       <p className="mb-4 text-xs text-muted-foreground">
-        O músico cria a conta com o mesmo e-mail cadastrado aqui e ganha acesso automaticamente.
+        O músico cria a conta com o mesmo e-mail cadastrado aqui e ganha acesso enquanto estiver liberado.
       </p>
       {data.length === 0 && <Empty>Nenhum músico cadastrado.</Empty>}
       <ul className="space-y-2">
@@ -67,7 +66,7 @@ function Musicos() {
             <div className="min-w-0 flex-1">
               <p className="font-semibold">{m.nome}</p>
               <p className="text-xs capitalize text-muted-foreground">
-                {m.instrumento} · {m.tipo} {!m.ativo && "· inativo"} {m.user_id ? "· conta ativa" : ""}
+                {m.instrumento} · {m.ativo ? "acesso liberado" : "sem acesso"} {m.user_id ? "· conta criada" : ""}
               </p>
             </div>
             {m.whatsapp && (
@@ -78,6 +77,17 @@ function Musicos() {
             {!m.user_id && (
               <button onClick={() => invite(m.email)} className="p-2 text-sun" aria-label="Copiar convite">
                 <Link2 className="size-4" />
+              </button>
+            )}
+            {me?.isAdmin && (
+              <button
+                onClick={async () => {
+                  await db.from("musicians").update({ ativo: !m.ativo }).eq("id", m.id);
+                  inv();
+                }}
+                className={cn("rounded-full border px-2 py-1 text-xs font-semibold", m.ativo ? "border-success text-success" : "text-muted-foreground")}
+              >
+                {m.ativo ? "Liberado" : "Bloqueado"}
               </button>
             )}
             <FormDialog

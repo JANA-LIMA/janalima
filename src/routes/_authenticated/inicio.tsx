@@ -2,8 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, MapPin, Mic2, Plus, Music2, Layers, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { fmtDate, hhmm, run, today, useMe, db, useInvalidate } from "@/lib/band";
-import { ConfirmButtons, Empty, Panel, StatusBadge } from "@/components/band/ui";
+import { fmtDate, hhmm, run, today, useMe } from "@/lib/band";
+import { Empty, Panel } from "@/components/band/ui";
 
 export const Route = createFileRoute("/_authenticated/inicio")({
   head: () => ({ meta: [{ title: "Início — Banda Jana Lima" }] }),
@@ -12,7 +12,6 @@ export const Route = createFileRoute("/_authenticated/inicio")({
 
 function Inicio() {
   const { data: me } = useMe();
-  const inv = useInvalidate();
   const t = today();
 
   const { data: shows = [] } = useQuery({
@@ -38,14 +37,8 @@ function Inicio() {
       ),
   });
 
-  const mid = me?.musicianId;
   const nextShow = shows[0];
   const nextEnsaio = ensaios[0];
-  const myLine = nextShow?.show_lineup.find((l) => l.musician_id === mid);
-  const myAtt = nextEnsaio?.rehearsal_attendance.find((a) => a.musician_id === mid);
-  const pend = shows.flatMap((s) =>
-    s.show_lineup.filter((l) => l.status === "pendente").map((l) => ({ show: s, l })),
-  );
 
   return (
     <div className="space-y-5">
@@ -68,18 +61,6 @@ function Inicio() {
         ) : (
           <p className="mt-1 font-semibold">Nenhum show agendado.</p>
         )}
-        {myLine && (
-          <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl bg-background/90 p-3 text-foreground">
-            <StatusBadge status={myLine.status} />
-            <ConfirmButtons
-              status={myLine.status}
-              onSet={async (s) => {
-                await db.rpc("responder_show", { _lineup: myLine.id, _status: s });
-                inv();
-              }}
-            />
-          </div>
-        )}
       </section>
 
       <Panel>
@@ -92,18 +73,6 @@ function Inicio() {
                 {nextEnsaio.local} · para {nextEnsaio.shows?.nome}
               </p>
             </Link>
-            {myAtt && (
-              <div className="mt-3 flex flex-wrap items-center gap-3">
-                <StatusBadge status={myAtt.status} />
-                <ConfirmButtons
-                  status={myAtt.status}
-                  onSet={async (s) => {
-                    await db.rpc("responder_ensaio", { _att: myAtt.id, _status: s });
-                    inv();
-                  }}
-                />
-              </div>
-            )}
           </>
         ) : (
           <p className="mt-1 text-sm text-muted-foreground">Nenhum ensaio marcado.</p>
@@ -130,31 +99,10 @@ function Inicio() {
           </div>
 
           <section>
-            <h2 className="mb-2 text-lg font-bold">Pendências de confirmação</h2>
-            {pend.length ? (
-              <ul className="space-y-2">
-                {pend.map(({ show, l }) => (
-                  <li key={l.id}>
-                    <Link to="/shows/$id" params={{ id: show.id }} className="flex items-center justify-between rounded-xl border bg-card p-3 text-sm">
-                      <span>
-                        <b>{l.musicians?.nome}</b> · {show.nome} ({fmtDate(show.data)})
-                      </span>
-                      <StatusBadge status="pendente" />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <Empty>Todo mundo respondeu. 🎉</Empty>
-            )}
-          </section>
-
-          <section>
             <h2 className="mb-2 text-lg font-bold">Shows futuros</h2>
             {shows.length ? (
               <ul className="space-y-2">
                 {shows.map((s) => {
-                  const ok = s.show_lineup.filter((l) => l.status === "confirmado").length;
                   return (
                     <li key={s.id}>
                       <Link to="/shows/$id" params={{ id: s.id }} className="flex items-center justify-between rounded-xl border bg-card p-3">
@@ -162,7 +110,7 @@ function Inicio() {
                           <p className="font-semibold">{s.nome}</p>
                           <p className="text-xs text-muted-foreground">{fmtDate(s.data)} · {s.local}</p>
                         </div>
-                        <span className="text-xs font-semibold text-muted-foreground">{ok}/{s.show_lineup.length} ok</span>
+                        <span className="text-xs font-semibold text-muted-foreground">{s.show_lineup.length} músicos</span>
                       </Link>
                     </li>
                   );

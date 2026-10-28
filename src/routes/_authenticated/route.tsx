@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Home, Music2, Layers, CalendarDays, PlaySquare, Users, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/lib/band";
-import logoAsset from "@/assets/logo.webp.asset.json";
+import monogramAsset from "@/assets/monogram.png.asset.json";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -38,14 +38,21 @@ function Layout() {
     <div className="min-h-screen pb-24">
       <header className="sticky top-0 z-30 border-b bg-background/85 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
-          <Link to="/inicio" aria-label="Banda Jana Lima — Início" className="flex items-center">
-            <img
-              src={logoAsset.url}
-              alt="Banda Jana Lima"
-              width={1200}
-              height={417}
-              className="h-6 w-auto brightness-125 md:h-7"
+          <Link to="/inicio" aria-label="Banda Jana Lima — Início" className="flex items-center gap-2">
+            <span
+              aria-hidden
+              className="size-7 shrink-0 bg-gradient-axe"
+              style={{
+                WebkitMaskImage: `url(${monogramAsset.url})`,
+                maskImage: `url(${monogramAsset.url})`,
+                maskSize: "contain",
+                maskRepeat: "no-repeat",
+                maskPosition: "center",
+              }}
             />
+            <span className="font-display text-lg font-extrabold">
+              Banda <span className="text-gradient-axe">Jana Lima</span>
+            </span>
           </Link>
           <div className="flex items-center gap-1">
             {me?.isAdmin && (

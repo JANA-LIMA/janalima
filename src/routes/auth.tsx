@@ -88,89 +88,88 @@ function AuthPage() {
   return (
     <div className="relative min-h-dvh overflow-hidden">
       {/* luzes de palco */}
-      <div aria-hidden className="login-aura pointer-events-none absolute inset-0" />
+      <div aria-hidden className="login-aura pointer-events-none absolute inset-0 md:hidden" />
+      <div aria-hidden className="login-aura-wide pointer-events-none absolute inset-0 hidden md:block" />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-background via-background/80 to-transparent"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background via-background/70 to-transparent"
       />
 
-      <div className="relative mx-auto flex min-h-dvh w-full max-w-sm flex-col px-6 md:grid md:max-w-5xl md:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] md:items-center md:gap-14 md:px-10">
-        {/* marca + retrato */}
-        <div className="relative flex min-h-0 flex-1 flex-col items-center pt-8 md:flex-none md:pt-0">
-          <img
-            src={logoAsset.url}
-            alt="Jana Lima"
-            width={1200}
-            height={417}
-            className="h-11 w-auto drop-shadow-[0_0_28px_color-mix(in_oklab,var(--orchid)_55%,transparent)] md:h-16"
-          />
-          <p className="mt-2 text-[0.62rem] font-semibold uppercase tracking-[0.42em] text-sun/80">Axé · Banda</p>
+      {/* retrato */}
+      <img
+        src={janaAsset.url}
+        alt="Jana Lima"
+        width={720}
+        height={1332}
+        className="mask-fade-bottom pointer-events-none absolute bottom-0 left-1/2 h-[58vh] w-auto -translate-x-1/2 md:left-[5%] md:h-[94vh] md:translate-x-0"
+      />
 
-          <div className="relative mt-1 min-h-0 w-full flex-1 md:h-[76vh] md:flex-none">
-            <img
-              src={janaAsset.url}
-              alt="Jana Lima"
-              width={720}
-              height={1332}
-              className="mask-fade-bottom absolute inset-x-0 bottom-0 mx-auto h-full w-auto max-w-full object-contain"
-            />
+      {/* coluna: marca + acesso */}
+      <div className="relative mx-auto flex min-h-dvh w-full max-w-sm flex-col px-6 md:mr-[7%] md:ml-auto md:max-w-md md:justify-center">
+        <img
+          src={logoAsset.url}
+          alt="Jana Lima"
+          width={1200}
+          height={417}
+          className="logo-pop mt-8 h-12 w-auto self-center md:mt-0 md:h-24 md:self-start"
+        />
+        <p className="mt-1 self-center text-[0.62rem] font-semibold uppercase tracking-[0.42em] text-sun/80 md:self-start">
+          Axé · Banda
+        </p>
+
+        <div className="flex-1 md:hidden" />
+
+        {sent ? (
+          <div className="mb-8 mt-4 rounded-2xl border border-orchid/25 bg-card/60 p-5 text-sm backdrop-blur-xl md:mb-0">
+            <Mail className="mb-2 size-6 text-orchid" />
+            {sent}
           </div>
-        </div>
-
-        {/* acesso */}
-        <div className="relative z-10 mt-2 pb-8 md:mt-0 md:pb-0">
-          {sent ? (
-            <div className="rounded-2xl border border-orchid/25 bg-card/60 p-5 text-sm backdrop-blur-xl">
-              <Mail className="mb-2 size-6 text-orchid" />
-              {sent}
+        ) : (
+          <form
+            onSubmit={submit}
+            className="mb-8 mt-4 space-y-4 rounded-2xl border border-orchid/20 bg-card/55 p-5 shadow-halo backdrop-blur-2xl md:mb-0"
+          >
+            <div className="grid grid-cols-2 gap-1 rounded-lg bg-muted/70 p-1 text-sm">
+              {(["entrar", "cadastro"] as const).map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => setMode(m)}
+                  className={`rounded-md py-1.5 font-semibold ${mode === m ? "bg-card text-foreground" : "text-muted-foreground"}`}
+                >
+                  {m === "entrar" ? "Entrar" : "Criar conta"}
+                </button>
+              ))}
             </div>
-          ) : (
-            <form
-              onSubmit={submit}
-              className="space-y-4 rounded-2xl border border-orchid/20 bg-card/55 p-5 shadow-glow backdrop-blur-2xl"
-            >
-              <div className="grid grid-cols-2 gap-1 rounded-lg bg-muted/70 p-1 text-sm">
-                {(["entrar", "cadastro"] as const).map((m) => (
-                  <button
-                    key={m}
-                    type="button"
-                    onClick={() => setMode(m)}
-                    className={`rounded-md py-1.5 font-semibold ${mode === m ? "bg-card text-foreground" : "text-muted-foreground"}`}
-                  >
-                    {m === "entrar" ? "Entrar" : "Criar conta"}
-                  </button>
-                ))}
-              </div>
-              <div className="space-y-1">
-                <Label>E-mail</Label>
-                <Input
-                  type="email"
-                  required
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="space-y-1">
-                <Label>Senha</Label>
-                <Input
-                  type="password"
-                  required
-                  minLength={6}
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              <Button type="submit" variant="hero" className="w-full" disabled={busy}>
-                {mode === "entrar" ? "Entrar" : "Criar conta"}
-              </Button>
-              <Button type="button" variant="outline" className="w-full" onClick={magic} disabled={busy}>
-                <Mail /> Receber link mágico
-              </Button>
-            </form>
-          )}
-        </div>
+            <div className="space-y-1">
+              <Label>E-mail</Label>
+              <Input
+                type="email"
+                required
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="space-y-1">
+              <Label>Senha</Label>
+              <Input
+                type="password"
+                required
+                minLength={6}
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <Button type="submit" variant="hero" className="w-full" disabled={busy}>
+              {mode === "entrar" ? "Entrar" : "Criar conta"}
+            </Button>
+            <Button type="button" variant="outline" className="w-full" onClick={magic} disabled={busy}>
+              <Mail /> Receber link mágico
+            </Button>
+          </form>
+        )}
       </div>
     </div>
   );

@@ -88,9 +88,20 @@
 }
 @utility login-aura {
   background-image:
-    radial-gradient(58% 40% at 50% 4%, color-mix(in oklab, var(--orchid) 40%, transparent), transparent 70%),
-    radial-gradient(52% 38% at 8% 72%, color-mix(in oklab, var(--primary) 26%, transparent), transparent 72%),
-    radial-gradient(48% 34% at 94% 84%, color-mix(in oklab, var(--sun) 18%, transparent), transparent 70%);
+    radial-gradient(48% 34% at 50% 34%, color-mix(in oklab, var(--orchid) 45%, transparent), transparent 70%),
+    radial-gradient(72% 40% at 50% 100%, color-mix(in oklab, var(--primary) 15%, transparent), transparent 76%);
+}
+@utility login-aura-wide {
+  background-image:
+    radial-gradient(34% 62% at 24% 46%, color-mix(in oklab, var(--orchid) 42%, transparent), transparent 72%),
+    radial-gradient(58% 44% at 82% 96%, color-mix(in oklab, var(--primary) 13%, transparent), transparent 78%);
+}
+@utility shadow-halo {
+  box-shadow: 0 24px 70px -24px color-mix(in oklab, var(--orchid) 50%, transparent);
+}
+@utility logo-pop {
+  filter: brightness(1.35) saturate(1.15)
+    drop-shadow(0 0 30px color-mix(in oklab, var(--orchid) 55%, transparent));
 }
 @utility mask-fade-bottom {
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 96%);

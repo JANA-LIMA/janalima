@@ -42,6 +42,8 @@
   --color-sidebar-accent-foreground: var(--foreground);
   --color-sidebar-border: var(--border);
   --color-sidebar-ring: var(--ring);
+  --color-orchid: var(--orchid);
+  --color-orchid-deep: var(--orchid-deep);
 }
 
 :root {
@@ -69,6 +71,8 @@
   --ring: oklch(0.72 0.19 50);
   --gradient-axe: linear-gradient(120deg, var(--primary), var(--sun));
   --shadow-glow: 0 10px 30px -10px color-mix(in oklab, var(--primary) 60%, transparent);
+  --orchid: oklch(0.631 0.16 337);
+  --orchid-deep: oklch(0.389 0.08 334);
 }
 
 @utility bg-gradient-axe {
@@ -81,6 +85,28 @@
 }
 @utility shadow-glow {
   box-shadow: var(--shadow-glow);
+}
+@utility login-aura {
+  background-image:
+    radial-gradient(48% 34% at 50% 34%, color-mix(in oklab, var(--orchid) 45%, transparent), transparent 70%),
+    radial-gradient(72% 40% at 50% 100%, color-mix(in oklab, var(--primary) 15%, transparent), transparent 76%);
+}
+@utility login-aura-wide {
+  background-image:
+    radial-gradient(34% 62% at 24% 46%, color-mix(in oklab, var(--orchid) 42%, transparent), transparent 72%),
+    radial-gradient(26% 42% at 79% 50%, color-mix(in oklab, var(--orchid) 16%, transparent), transparent 76%),
+    radial-gradient(58% 44% at 82% 96%, color-mix(in oklab, var(--primary) 13%, transparent), transparent 78%);
+}
+@utility shadow-halo {
+  box-shadow: 0 24px 70px -24px color-mix(in oklab, var(--orchid) 50%, transparent);
+}
+@utility logo-pop {
+  filter: brightness(1.35) saturate(1.15)
+    drop-shadow(0 0 30px color-mix(in oklab, var(--orchid) 55%, transparent));
+}
+@utility mask-fade-bottom {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 96%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 96%);
 }
 
 @layer base {

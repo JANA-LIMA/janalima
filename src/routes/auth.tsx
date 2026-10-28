@@ -6,6 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import janaAsset from "@/assets/jana-cut.webp.asset.json";
+import logoAsset from "@/assets/logo.webp.asset.json";
 
 type Search = { email?: string | undefined; modo?: string | undefined };
 
@@ -84,34 +86,50 @@ function AuthPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col justify-center overflow-hidden px-6 py-10">
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-        <iframe
-          title="Jana Lima ao vivo"
-          src="https://www.youtube-nocookie.com/embed/Znp-FIG15dI?autoplay=1&mute=1&loop=1&playlist=Znp-FIG15dI&controls=0&showinfo=0&modestbranding=1&playsinline=1&rel=0&iv_load_policy=3&disablekb=1"
-          allow="autoplay; encrypted-media"
-          tabIndex={-1}
-          className="absolute top-1/2 left-1/2 h-[max(100vh,56.25vw)] w-[max(100vw,177.78vh)] -translate-x-1/2 -translate-y-1/2 border-0"
+    <div className="relative min-h-dvh overflow-hidden">
+      {/* luzes de palco */}
+      <div aria-hidden className="login-aura pointer-events-none absolute inset-0 md:hidden" />
+      <div aria-hidden className="login-aura-wide pointer-events-none absolute inset-0 hidden md:block" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background via-background/70 to-transparent"
+      />
+
+      {/* retrato */}
+      <img
+        src={janaAsset.url}
+        alt="Jana Lima"
+        width={720}
+        height={1332}
+        className="mask-fade-bottom pointer-events-none absolute top-[12vh] left-1/2 h-[72vh] w-auto -translate-x-1/2 md:top-auto md:bottom-0 md:left-[5%] md:h-[94vh] md:translate-x-0"
+      />
+
+      {/* coluna: marca + acesso */}
+      <div className="relative mx-auto flex min-h-dvh w-full max-w-sm flex-col px-6 md:mr-[7%] md:ml-auto md:max-w-md md:justify-center">
+        <img
+          src={logoAsset.url}
+          alt="Jana Lima"
+          width={1200}
+          height={417}
+          className="logo-pop mt-8 h-12 w-auto self-center md:mt-0 md:h-24 md:self-start"
         />
-        <div className="absolute inset-0 bg-background/70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-primary/20" />
-      </div>
-      <div className="pointer-events-none absolute -top-32 -right-24 size-80 rounded-full bg-gradient-axe opacity-30 blur-3xl" />
-      <div className="relative mx-auto w-full max-w-sm">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sun">Axé · Banda</p>
-        <h1 className="mt-2 text-5xl font-extrabold leading-none">
-          Banda <span className="text-gradient-axe">Jana Lima</span>
-        </h1>
-        <p className="mt-3 text-sm text-muted-foreground">Repertório, VS, shows e ensaios num só lugar.</p>
+        <p className="mt-1 self-center text-[0.62rem] font-semibold uppercase tracking-[0.42em] text-sun/80 md:self-start">
+          Axé · Banda
+        </p>
+
+        <div className="flex-1 md:hidden" />
 
         {sent ? (
-          <div className="mt-8 rounded-2xl border bg-card p-5 text-sm">
-            <Mail className="mb-2 size-6 text-primary" />
+          <div className="mb-8 mt-4 rounded-2xl border border-orchid/25 bg-card/60 p-5 text-sm backdrop-blur-xl md:mb-0">
+            <Mail className="mb-2 size-6 text-orchid" />
             {sent}
           </div>
         ) : (
-          <form onSubmit={submit} className="mt-8 space-y-4 rounded-2xl border bg-card p-5">
-            <div className="grid grid-cols-2 gap-1 rounded-lg bg-muted p-1 text-sm">
+          <form
+            onSubmit={submit}
+            className="mb-8 mt-4 space-y-4 rounded-2xl border border-orchid/20 bg-card/55 p-5 shadow-halo backdrop-blur-2xl md:mb-0"
+          >
+            <div className="grid grid-cols-2 gap-1 rounded-lg bg-muted/70 p-1 text-sm">
               {(["entrar", "cadastro"] as const).map((m) => (
                 <button
                   key={m}
@@ -125,11 +143,24 @@ function AuthPage() {
             </div>
             <div className="space-y-1">
               <Label>E-mail</Label>
-              <Input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input
+                type="email"
+                required
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div className="space-y-1">
               <Label>Senha</Label>
-              <Input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
+              <Input
+                type="password"
+                required
+                minLength={6}
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
             <Button type="submit" variant="hero" className="w-full" disabled={busy}>
               {mode === "entrar" ? "Entrar" : "Criar conta"}

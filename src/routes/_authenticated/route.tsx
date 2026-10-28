@@ -37,8 +37,14 @@ function Layout() {
     <div className="min-h-screen pb-24">
       <header className="sticky top-0 z-30 border-b bg-background/85 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
-          <Link to="/inicio" className="font-display text-lg font-extrabold">
-            Banda <span className="text-gradient-axe">Jana Lima</span>
+          <Link to="/inicio" aria-label="Banda Jana Lima — Início" className="flex items-center">
+            <img
+              src={logoAsset.url}
+              alt="Banda Jana Lima"
+              width={1200}
+              height={417}
+              className="h-6 w-auto brightness-125 md:h-7"
+            />
           </Link>
           <div className="flex items-center gap-1">
             {me?.isAdmin && (

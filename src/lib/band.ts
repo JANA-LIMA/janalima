@@ -37,7 +37,7 @@ export function useMe() {
       if (!u.user) return null;
       const [{ data: roles }, { data: mus }] = await Promise.all([
         supabase.from("user_roles").select("role").eq("user_id", u.user.id),
-        supabase.from("musicians").select("id,nome").eq("user_id", u.user.id).maybeSingle(),
+        supabase.from("musicians").select("id,nome,ativo").eq("user_id", u.user.id).maybeSingle(),
       ]);
       const r = (roles ?? []).map((x) => x.role);
       const isAdmin = r.includes("admin");
@@ -48,7 +48,7 @@ export function useMe() {
         isAdmin,
         isFixo,
         isFreela: r.includes("freela"),
-        isStaff: isAdmin || isFixo,
+        isStaff: isAdmin || !!mus?.ativo,
         musicianId: mus?.id ?? null,
         nome: mus?.nome ?? null,
       };

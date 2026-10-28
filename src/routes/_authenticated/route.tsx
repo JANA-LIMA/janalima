@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Home, Music2, Layers, CalendarDays, PlaySquare, Users, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/lib/band";
+import logoAsset from "@/assets/logo.webp.asset.json";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,

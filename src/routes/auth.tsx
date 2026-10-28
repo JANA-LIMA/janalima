@@ -111,9 +111,9 @@ function AuthPage() {
           alt="Jana Lima"
           width={1200}
           height={417}
-          className="logo-pop mt-8 h-12 w-auto self-center md:mt-0 md:h-24 md:self-start"
+          className="logo-pop mt-8 h-12 w-auto self-center md:mt-0 md:h-24"
         />
-        <p className="mt-1 self-center text-[0.62rem] font-semibold uppercase tracking-[0.42em] text-sun/80 md:self-start">
+        <p className="mt-1 self-center text-[0.62rem] font-semibold uppercase tracking-[0.42em] text-sun/80">
           Axé · Banda
         </p>
 

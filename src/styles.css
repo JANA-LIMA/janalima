@@ -101,8 +101,9 @@
   box-shadow: 0 24px 70px -24px color-mix(in oklab, var(--orchid) 50%, transparent);
 }
 @utility logo-pop {
-  filter: brightness(1.35) saturate(1.15)
-    drop-shadow(0 0 30px color-mix(in oklab, var(--orchid) 55%, transparent));
+  filter: brightness(1.7) saturate(1.4)
+    drop-shadow(0 0 6px color-mix(in oklab, var(--orchid) 70%, transparent))
+    drop-shadow(0 0 26px color-mix(in oklab, var(--orchid) 45%, transparent));
 }
 @utility mask-fade-bottom {
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 96%);

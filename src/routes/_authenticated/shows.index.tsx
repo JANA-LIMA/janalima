@@ -9,7 +9,16 @@ import { Empty, FormDialog, PageHeader } from "@/components/band/ui";
 import { showFields } from "@/components/band/fields";
 
 export const Route = createFileRoute("/_authenticated/shows/")({
-  head: () => ({ meta: [{ title: "Shows — Banda Jana Lima" }] }),
+  head: () => ({
+    meta: [
+      { title: "Shows — Banda Jana Lima" },
+      { name: "description", content: "Agenda de shows da Banda Jana Lima." },
+      { property: "og:title", content: "Shows — Banda Jana Lima" },
+      { property: "og:description", content: "Agenda de shows da Banda Jana Lima." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: Shows,
 });
 

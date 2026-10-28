@@ -11,7 +11,16 @@ import { blockFields } from "@/components/band/fields";
 import { VsPlayer } from "@/components/band/VsPlayer";
 
 export const Route = createFileRoute("/_authenticated/blocos/$id")({
-  head: () => ({ meta: [{ title: "Bloco — Banda Jana Lima" }] }),
+  head: () => ({
+    meta: [
+      { title: "Bloco — Banda Jana Lima" },
+      { name: "description", content: "Sequência de músicas e áudio VS de um bloco da Banda Jana Lima." },
+      { property: "og:title", content: "Bloco — Banda Jana Lima" },
+      { property: "og:description", content: "Sequência de músicas e áudio VS de um bloco da Banda Jana Lima." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: BlockPage,
 });
 

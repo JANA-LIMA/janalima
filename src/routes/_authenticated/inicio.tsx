@@ -6,7 +6,16 @@ import { fmtDate, hhmm, run, today, useMe } from "@/lib/band";
 import { Empty, Panel } from "@/components/band/ui";
 
 export const Route = createFileRoute("/_authenticated/inicio")({
-  head: () => ({ meta: [{ title: "Início — Banda Jana Lima" }] }),
+  head: () => ({
+    meta: [
+      { title: "Início — Banda Jana Lima" },
+      { name: "description", content: "Agenda de shows e ensaios da Banda Jana Lima." },
+      { property: "og:title", content: "Início — Banda Jana Lima" },
+      { property: "og:description", content: "Agenda de shows e ensaios da Banda Jana Lima." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: Inicio,
 });
 

@@ -86,6 +86,16 @@
 @utility shadow-glow {
   box-shadow: var(--shadow-glow);
 }
+@utility login-aura {
+  background-image:
+    radial-gradient(58% 40% at 50% 4%, color-mix(in oklab, var(--orchid) 40%, transparent), transparent 70%),
+    radial-gradient(52% 38% at 8% 72%, color-mix(in oklab, var(--primary) 26%, transparent), transparent 72%),
+    radial-gradient(48% 34% at 94% 84%, color-mix(in oklab, var(--sun) 18%, transparent), transparent 70%);
+}
+@utility mask-fade-bottom {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 96%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 96%);
+}
 
 @layer base {
   * {

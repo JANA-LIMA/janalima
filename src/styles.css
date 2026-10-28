@@ -71,6 +71,8 @@
   --ring: oklch(0.72 0.19 50);
   --gradient-axe: linear-gradient(120deg, var(--primary), var(--sun));
   --shadow-glow: 0 10px 30px -10px color-mix(in oklab, var(--primary) 60%, transparent);
+  --orchid: oklch(0.631 0.16 337);
+  --orchid-deep: oklch(0.389 0.08 334);
 }
 
 @utility bg-gradient-axe {

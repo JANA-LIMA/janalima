@@ -6,6 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import janaAsset from "@/assets/jana-cut.webp.asset.json";
+import logoAsset from "@/assets/logo.webp.asset.json";
 
 type Search = { email?: string | undefined; modo?: string | undefined };
 
@@ -84,61 +86,91 @@ function AuthPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col justify-center overflow-hidden px-6 py-10">
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-        <iframe
-          title="Jana Lima ao vivo"
-          src="https://www.youtube-nocookie.com/embed/Znp-FIG15dI?autoplay=1&mute=1&loop=1&playlist=Znp-FIG15dI&controls=0&showinfo=0&modestbranding=1&playsinline=1&rel=0&iv_load_policy=3&disablekb=1"
-          allow="autoplay; encrypted-media"
-          tabIndex={-1}
-          className="absolute top-1/2 left-1/2 h-[max(100vh,56.25vw)] w-[max(100vw,177.78vh)] -translate-x-1/2 -translate-y-1/2 border-0"
-        />
-        <div className="absolute inset-0 bg-background/70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-primary/20" />
-      </div>
-      <div className="pointer-events-none absolute -top-32 -right-24 size-80 rounded-full bg-gradient-axe opacity-30 blur-3xl" />
-      <div className="relative mx-auto w-full max-w-sm">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sun">Axé · Banda</p>
-        <h1 className="mt-2 text-5xl font-extrabold leading-none">
-          Banda <span className="text-gradient-axe">Jana Lima</span>
-        </h1>
-        <p className="mt-3 text-sm text-muted-foreground">Repertório, VS, shows e ensaios num só lugar.</p>
+    <div className="relative min-h-dvh overflow-hidden">
+      {/* luzes de palco */}
+      <div aria-hidden className="login-aura pointer-events-none absolute inset-0" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-background via-background/80 to-transparent"
+      />
 
-        {sent ? (
-          <div className="mt-8 rounded-2xl border bg-card p-5 text-sm">
-            <Mail className="mb-2 size-6 text-primary" />
-            {sent}
+      <div className="relative mx-auto flex min-h-dvh w-full max-w-sm flex-col px-6 md:grid md:max-w-5xl md:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] md:items-center md:gap-14 md:px-10">
+        {/* marca + retrato */}
+        <div className="relative flex min-h-0 flex-1 flex-col items-center pt-8 md:flex-none md:pt-0">
+          <img
+            src={logoAsset.url}
+            alt="Jana Lima"
+            width={1200}
+            height={417}
+            className="h-11 w-auto drop-shadow-[0_0_28px_color-mix(in_oklab,var(--orchid)_55%,transparent)] md:h-16"
+          />
+          <p className="mt-2 text-[0.62rem] font-semibold uppercase tracking-[0.42em] text-sun/80">Axé · Banda</p>
+
+          <div className="relative mt-1 min-h-0 w-full flex-1 md:h-[76vh] md:flex-none">
+            <img
+              src={janaAsset.url}
+              alt="Jana Lima"
+              width={720}
+              height={1332}
+              className="mask-fade-bottom absolute inset-x-0 bottom-0 mx-auto h-full w-auto max-w-full object-contain"
+            />
           </div>
-        ) : (
-          <form onSubmit={submit} className="mt-8 space-y-4 rounded-2xl border bg-card p-5">
-            <div className="grid grid-cols-2 gap-1 rounded-lg bg-muted p-1 text-sm">
-              {(["entrar", "cadastro"] as const).map((m) => (
-                <button
-                  key={m}
-                  type="button"
-                  onClick={() => setMode(m)}
-                  className={`rounded-md py-1.5 font-semibold ${mode === m ? "bg-card text-foreground" : "text-muted-foreground"}`}
-                >
-                  {m === "entrar" ? "Entrar" : "Criar conta"}
-                </button>
-              ))}
+        </div>
+
+        {/* acesso */}
+        <div className="relative z-10 mt-2 pb-8 md:mt-0 md:pb-0">
+          {sent ? (
+            <div className="rounded-2xl border border-orchid/25 bg-card/60 p-5 text-sm backdrop-blur-xl">
+              <Mail className="mb-2 size-6 text-orchid" />
+              {sent}
             </div>
-            <div className="space-y-1">
-              <Label>E-mail</Label>
-              <Input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-            </div>
-            <div className="space-y-1">
-              <Label>Senha</Label>
-              <Input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
-            </div>
-            <Button type="submit" variant="hero" className="w-full" disabled={busy}>
-              {mode === "entrar" ? "Entrar" : "Criar conta"}
-            </Button>
-            <Button type="button" variant="outline" className="w-full" onClick={magic} disabled={busy}>
-              <Mail /> Receber link mágico
-            </Button>
-          </form>
-        )}
+          ) : (
+            <form
+              onSubmit={submit}
+              className="space-y-4 rounded-2xl border border-orchid/20 bg-card/55 p-5 shadow-glow backdrop-blur-2xl"
+            >
+              <div className="grid grid-cols-2 gap-1 rounded-lg bg-muted/70 p-1 text-sm">
+                {(["entrar", "cadastro"] as const).map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => setMode(m)}
+                    className={`rounded-md py-1.5 font-semibold ${mode === m ? "bg-card text-foreground" : "text-muted-foreground"}`}
+                  >
+                    {m === "entrar" ? "Entrar" : "Criar conta"}
+                  </button>
+                ))}
+              </div>
+              <div className="space-y-1">
+                <Label>E-mail</Label>
+                <Input
+                  type="email"
+                  required
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="space-y-1">
+                <Label>Senha</Label>
+                <Input
+                  type="password"
+                  required
+                  minLength={6}
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <Button type="submit" variant="hero" className="w-full" disabled={busy}>
+                {mode === "entrar" ? "Entrar" : "Criar conta"}
+              </Button>
+              <Button type="button" variant="outline" className="w-full" onClick={magic} disabled={busy}>
+                <Mail /> Receber link mágico
+              </Button>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   );

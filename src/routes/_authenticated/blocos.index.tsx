@@ -8,7 +8,16 @@ import { Empty, FormDialog, PageHeader } from "@/components/band/ui";
 import { blockFields } from "@/components/band/fields";
 
 export const Route = createFileRoute("/_authenticated/blocos/")({
-  head: () => ({ meta: [{ title: "Blocos — Banda Jana Lima" }] }),
+  head: () => ({
+    meta: [
+      { title: "Blocos — Banda Jana Lima" },
+      { name: "description", content: "Blocos do repertório e VS da Banda Jana Lima." },
+      { property: "og:title", content: "Blocos — Banda Jana Lima" },
+      { property: "og:description", content: "Blocos do repertório e VS da Banda Jana Lima." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: Blocos,
 });
 

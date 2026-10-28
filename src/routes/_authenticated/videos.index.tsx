@@ -8,7 +8,16 @@ import { Empty, FormDialog, PageHeader } from "@/components/band/ui";
 import { videoFields } from "@/components/band/fields";
 
 export const Route = createFileRoute("/_authenticated/videos/")({
-  head: () => ({ meta: [{ title: "Vídeos ao vivo — Banda Jana Lima" }] }),
+  head: () => ({
+    meta: [
+      { title: "Vídeos ao vivo — Banda Jana Lima" },
+      { name: "description", content: "Vídeos de apresentações ao vivo da Banda Jana Lima." },
+      { property: "og:title", content: "Vídeos ao vivo — Banda Jana Lima" },
+      { property: "og:description", content: "Vídeos de apresentações ao vivo da Banda Jana Lima." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: Videos,
 });
 

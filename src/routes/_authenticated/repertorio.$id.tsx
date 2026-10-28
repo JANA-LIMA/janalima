@@ -9,7 +9,16 @@ import { Empty, FormDialog, Panel, YouTube } from "@/components/band/ui";
 import { songFields } from "@/components/band/fields";
 
 export const Route = createFileRoute("/_authenticated/repertorio/$id")({
-  head: () => ({ meta: [{ title: "Música — Banda Jana Lima" }] }),
+  head: () => ({
+    meta: [
+      { title: "Música — Banda Jana Lima" },
+      { name: "description", content: "Tom, informações e referências de uma música da Banda Jana Lima." },
+      { property: "og:title", content: "Música — Banda Jana Lima" },
+      { property: "og:description", content: "Tom, informações e referências de uma música da Banda Jana Lima." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: SongPage,
 });
 

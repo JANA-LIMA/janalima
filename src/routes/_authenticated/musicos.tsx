@@ -9,7 +9,16 @@ import { Empty, FormDialog, PageHeader, type Field } from "@/components/band/ui"
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/musicos")({
-  head: () => ({ meta: [{ title: "Músicos — Banda Jana Lima" }] }),
+  head: () => ({
+    meta: [
+      { title: "Músicos — Banda Jana Lima" },
+      { name: "description", content: "Cadastro e acesso dos músicos da Banda Jana Lima." },
+      { property: "og:title", content: "Músicos — Banda Jana Lima" },
+      { property: "og:description", content: "Cadastro e acesso dos músicos da Banda Jana Lima." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: Musicos,
 });
 

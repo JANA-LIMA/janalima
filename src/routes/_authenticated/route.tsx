@@ -60,11 +60,11 @@ function Layout() {
         </div>
       </header>
       <main className="mx-auto max-w-3xl px-4 pt-5">
-        {me && !me.isAdmin && !me.isFixo && !me.isFreela ? (
+        {me && !me.isStaff ? (
           <div className="rounded-2xl border bg-card p-6 text-center">
-            <h2 className="text-xl font-bold">Aguardando liberação</h2>
+            <h2 className="text-xl font-bold">Acesso não liberado</h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              Sua conta ({me.email}) ainda não está vinculada a um músico ativo. Peça ao admin para cadastrar este e-mail.
+              Sua conta ({me.email}) ainda não tem acesso ao app. Peça ao admin para liberar você na tela Músicos.
             </p>
           </div>
         ) : (

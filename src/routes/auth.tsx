@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import janaAsset from "@/assets/jana-cut.webp.asset.json";
-import logoAsset from "@/assets/logo.webp.asset.json";
+import logoAsset from "@/assets/logo-official.webp.asset.json";
 
 type Search = { email?: string | undefined; modo?: string | undefined };
 

@@ -22,8 +22,6 @@ export type Me = {
   userId: string;
   email: string;
   isAdmin: boolean;
-  isFixo: boolean;
-  isFreela: boolean;
   isStaff: boolean;
   musicianId: string | null;
   nome: string | null;
@@ -41,13 +39,10 @@ export function useMe() {
       ]);
       const r = (roles ?? []).map((x) => x.role);
       const isAdmin = r.includes("admin");
-      const isFixo = r.includes("fixo");
       return {
         userId: u.user.id,
         email: u.user.email ?? "",
         isAdmin,
-        isFixo,
-        isFreela: r.includes("freela"),
         isStaff: isAdmin || !!mus?.ativo,
         musicianId: mus?.id ?? null,
         nome: mus?.nome ?? null,

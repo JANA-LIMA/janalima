@@ -179,7 +179,11 @@ function ShowPage() {
       )}
 
 
-      <Button variant="hero" className="w-full" onClick={share}>
+      <Button asChild variant="hero" size="lg" className="w-full text-lg">
+        <Link to="/shows/$id/palco" params={{ id }}><Mic2 /> Abrir Modo Palco</Link>
+      </Button>
+
+      <Button variant="outline" className="w-full" onClick={share}>
         <Share2 /> Compartilhar no WhatsApp
       </Button>
 

@@ -22,6 +22,7 @@ import { Route as AuthenticatedShowsIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedShowsIdRouteImport } from './routes/_authenticated/shows.$id'
 import { Route as AuthenticatedVideosIndexRouteImport } from './routes/_authenticated/videos.index'
 import { Route as AuthenticatedVideosIdRouteImport } from './routes/_authenticated/videos.$id'
+import { Route as AuthenticatedShowsIdPalcoRouteImport } from './routes/_authenticated/shows_.$id.palco'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -91,6 +92,12 @@ const AuthenticatedVideosIdRoute = AuthenticatedVideosIdRouteImport.update({
   path: '/videos/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedShowsIdPalcoRoute =
+  AuthenticatedShowsIdPalcoRouteImport.update({
+    id: '/shows_/$id/palco',
+    path: '/shows/$id/palco',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/repertorio/': typeof AuthenticatedRepertorioIndexRoute
   '/shows/': typeof AuthenticatedShowsIndexRoute
   '/videos/': typeof AuthenticatedVideosIndexRoute
+  '/shows/$id/palco': typeof AuthenticatedShowsIdPalcoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -119,6 +127,7 @@ export interface FileRoutesByTo {
   '/repertorio': typeof AuthenticatedRepertorioIndexRoute
   '/shows': typeof AuthenticatedShowsIndexRoute
   '/videos': typeof AuthenticatedVideosIndexRoute
+  '/shows/$id/palco': typeof AuthenticatedShowsIdPalcoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -135,6 +144,7 @@ export interface FileRoutesById {
   '/_authenticated/repertorio/': typeof AuthenticatedRepertorioIndexRoute
   '/_authenticated/shows/': typeof AuthenticatedShowsIndexRoute
   '/_authenticated/videos/': typeof AuthenticatedVideosIndexRoute
+  '/_authenticated/shows_/$id/palco': typeof AuthenticatedShowsIdPalcoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -151,6 +161,7 @@ export interface FileRouteTypes {
     | '/repertorio/'
     | '/shows/'
     | '/videos/'
+    | '/shows/$id/palco'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -165,6 +176,7 @@ export interface FileRouteTypes {
     | '/repertorio'
     | '/shows'
     | '/videos'
+    | '/shows/$id/palco'
   id:
     | '__root__'
     | '/'
@@ -180,6 +192,7 @@ export interface FileRouteTypes {
     | '/_authenticated/repertorio/'
     | '/_authenticated/shows/'
     | '/_authenticated/videos/'
+    | '/_authenticated/shows_/$id/palco'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -281,6 +294,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVideosIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/shows_/$id/palco': {
+      id: '/_authenticated/shows_/$id/palco'
+      path: '/shows/$id/palco'
+      fullPath: '/shows/$id/palco'
+      preLoaderRoute: typeof AuthenticatedShowsIdPalcoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -295,6 +315,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedRepertorioIndexRoute: typeof AuthenticatedRepertorioIndexRoute
   AuthenticatedShowsIndexRoute: typeof AuthenticatedShowsIndexRoute
   AuthenticatedVideosIndexRoute: typeof AuthenticatedVideosIndexRoute
+  AuthenticatedShowsIdPalcoRoute: typeof AuthenticatedShowsIdPalcoRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -308,6 +329,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedRepertorioIndexRoute: AuthenticatedRepertorioIndexRoute,
   AuthenticatedShowsIndexRoute: AuthenticatedShowsIndexRoute,
   AuthenticatedVideosIndexRoute: AuthenticatedVideosIndexRoute,
+  AuthenticatedShowsIdPalcoRoute: AuthenticatedShowsIdPalcoRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

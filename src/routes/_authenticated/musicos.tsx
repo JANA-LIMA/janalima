@@ -1,9 +1,10 @@
+import { useState, type ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Link2, MessageCircle, Pencil, Plus, Send } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { db, INSTRUMENTOS, run, useInvalidate, useMe } from "@/lib/band";
+import { db, filtrarPorInstrumento, INSTRUMENTOS, instrumentosPresentes, run, useInvalidate, useMe } from "@/lib/band";
 import { Button } from "@/components/ui/button";
 import { Empty, FormDialog, PageHeader, type Field } from "@/components/band/ui";
 import { cn } from "@/lib/utils";
@@ -37,6 +38,10 @@ function Musicos() {
     queryKey: ["musicians"],
     queryFn: () => run(supabase.from("musicians").select("*").order("ativo", { ascending: false }).order("nome")),
   });
+
+  const [filtro, setFiltro] = useState<string | null>(null);
+  const instrumentos = instrumentosPresentes(data);
+  const visiveis = filtrarPorInstrumento(data, filtro);
 
   const invite = (email: string | null) => {
     const url = `${window.location.origin}/auth?modo=cadastro${email ? `&email=${encodeURIComponent(email)}` : ""}`;
@@ -72,12 +77,25 @@ function Musicos() {
           )
         }
       />
-      <p className="mb-4 text-xs text-muted-foreground">
+      <p className="mb-3 text-xs text-muted-foreground">
         O músico cria a conta com o mesmo e-mail cadastrado aqui e ganha acesso enquanto estiver liberado.
       </p>
+      {data.length > 0 && (
+        <div className="-mx-4 mb-4 flex gap-2 overflow-x-auto px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <Chip active={filtro === null} onClick={() => setFiltro(null)}>
+            Todos <span className="opacity-60">{data.length}</span>
+          </Chip>
+          {instrumentos.map((i) => (
+            <Chip key={i} active={filtro === i} onClick={() => setFiltro(filtro === i ? null : i)}>
+              {i} <span className="opacity-60">{data.filter((m) => m.instrumento === i).length}</span>
+            </Chip>
+          ))}
+        </div>
+      )}
       {data.length === 0 && <Empty>Nenhum músico cadastrado.</Empty>}
+      {data.length > 0 && visiveis.length === 0 && <Empty>Nenhum músico com esse instrumento.</Empty>}
       <ul className="space-y-2">
-        {data.map((m) => (
+        {visiveis.map((m) => (
           <li key={m.id} className={cn("flex items-center gap-3 rounded-xl border bg-card p-3", !m.ativo && "opacity-50")}>
             <div className="min-w-0 flex-1">
               <p className="font-semibold">{m.nome}</p>
@@ -126,5 +144,23 @@ function Musicos() {
         ))}
       </ul>
     </div>
+  );
+}
+
+function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={cn(
+        "shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold capitalize transition-colors",
+        active
+          ? "border-transparent bg-primary text-primary-foreground shadow-glow"
+          : "border-border text-muted-foreground",
+      )}
+    >
+      {children}
+    </button>
   );
 }

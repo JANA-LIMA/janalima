@@ -51,6 +51,19 @@ export function useMe() {
   });
 }
 
+/** Instruments that actually appear in the list, in INSTRUMENTOS order (unknown ones last, A–Z). */
+export function instrumentosPresentes<T extends { instrumento?: string | null }>(ms: T[]) {
+  const presentes = new Set(ms.map((m) => m.instrumento).filter(Boolean) as string[]);
+  const conhecidos = INSTRUMENTOS.filter((i) => presentes.has(i));
+  const extras = [...presentes].filter((i) => !INSTRUMENTOS.includes(i)).sort();
+  return [...conhecidos, ...extras];
+}
+
+/** Musicians matching the chosen instrument; null means "no filter". */
+export function filtrarPorInstrumento<T extends { instrumento?: string | null }>(ms: T[], instrumento: string | null) {
+  return instrumento ? ms.filter((m) => m.instrumento === instrumento) : ms;
+}
+
 /** Run a supabase query and throw on error. */
 export async function run<T>(p: PromiseLike<{ data: T; error: unknown }>): Promise<NonNullable<T>> {
   const { data, error } = await p;

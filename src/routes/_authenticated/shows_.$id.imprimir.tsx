@@ -58,12 +58,18 @@ function Imprimir() {
     if (!isSuccess || !show) return;
     const el = sheet.current;
     if (!el) return;
-    let s = 14;
-    el.style.fontSize = `${s}px`;
-    while (el.scrollHeight > PAGE_H && s > 6) {
-      s -= 0.25;
-      el.style.fontSize = `${s}px`;
+    const fits = (v: number) => {
+      el.style.fontSize = `${v}px`;
+      return el.scrollHeight <= PAGE_H + 0.5 && el.scrollWidth <= PAGE_W + 0.5;
+    };
+    // Binary search for the largest font that still fits on one A4 page
+    let lo = 6, hi = 60;
+    while (hi - lo > 0.1) {
+      const mid = (lo + hi) / 2;
+      if (fits(mid)) lo = mid; else hi = mid;
     }
+    const s = Math.floor(lo * 10) / 10;
+    el.style.fontSize = `${s}px`;
     setSize(s);
   }, [isSuccess, show, items]);
 

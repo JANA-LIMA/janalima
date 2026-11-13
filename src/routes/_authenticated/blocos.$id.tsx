@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Pencil, Plus, Trash2, Upload } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pencil, Plus, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { db, run, useInvalidate, useMe } from "@/lib/band";
@@ -48,6 +48,14 @@ function BlockPage() {
     queryFn: () => run(supabase.from("songs").select("id,titulo").order("titulo")),
   });
 
+  const { data: allBlocks = [] } = useQuery({
+    queryKey: ["blocks-nav"],
+    queryFn: () => run(supabase.from("blocks").select("id,nome").order("nome")),
+  });
+  const idx = allBlocks.findIndex((b) => b.id === id);
+  const prev = idx > 0 ? allBlocks[idx - 1] : null;
+  const next = idx >= 0 && idx < allBlocks.length - 1 ? allBlocks[idx + 1] : null;
+
   const [items, setItems] = useState<Row[]>([]);
   useEffect(() => setItems(rows as Row[]), [rows]);
 
@@ -79,6 +87,7 @@ function BlockPage() {
 
   return (
     <div className="space-y-5">
+      <Link to="/blocos" className="inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground"><ChevronLeft className="size-4" /> Voltar aos blocos</Link>
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs font-bold uppercase tracking-widest text-sun">Bloco</p>
@@ -116,6 +125,14 @@ function BlockPage() {
         )}
       </div>
 
+      <div className="flex items-center justify-between gap-2">
+        {prev ? (
+          <Button asChild variant="outline" size="sm"><Link to="/blocos/$id" params={{ id: prev.id }}><ChevronLeft /> {prev.nome}</Link></Button>
+        ) : <span />}
+        {next ? (
+          <Button asChild variant="hero" size="sm"><Link to="/blocos/$id" params={{ id: next.id }}>{next.nome} <ChevronRight /></Link></Button>
+        ) : <span />}
+      </div>
       {block.vs_path ? <VsPlayer path={block.vs_path} /> : <Empty>Sem arquivo de VS.</Empty>}
       {admin && (
         <label className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed p-3 text-sm font-semibold text-muted-foreground">
@@ -188,6 +205,15 @@ function BlockPage() {
           </div>
         )}
       </section>
+      <div className="flex pt-2 items-center justify-between gap-2">
+        {prev ? (
+          <Button asChild variant="outline" size="sm"><Link to="/blocos/$id" params={{ id: prev.id }}><ChevronLeft /> {prev.nome}</Link></Button>
+        ) : <span />}
+        {next ? (
+          <Button asChild variant="hero" size="sm"><Link to="/blocos/$id" params={{ id: next.id }}>{next.nome} <ChevronRight /></Link></Button>
+        ) : <span />}
+      </div>
+
     </div>
   );
 }

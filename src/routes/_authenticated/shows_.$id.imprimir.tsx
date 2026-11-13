@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLayoutEffect, useRef, useState } from "react";
 import { Printer, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { fmtDate, hhmm, run } from "@/lib/band";
+import { fmtDate, run } from "@/lib/band";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/shows_/$id/imprimir")({
@@ -83,23 +83,10 @@ function Imprimir() {
           className="print-sheet"
           style={{ width: PAGE_W, height: PAGE_H, fontSize: size }}
         >
-          {show && (
-            <header className="print-head">
-              <div>
-                <p className="print-band">BANDA JANA LIMA</p>
-                <h1>{show.nome}</h1>
-              </div>
-              <div className="print-meta">
-                <p>{fmtDate(show.data)}{show.local ? ` · ${show.local}` : ""}</p>
-                <p>
-                  {[
-                    show.horario_passagem && `Passagem ${hhmm(show.horario_passagem)}`,
-                    show.horario_palco && `Palco ${hhmm(show.horario_palco)}`,
-                  ].filter(Boolean).join(" · ")}
-                </p>
-              </div>
-            </header>
-          )}
+          <header className="print-head">
+            <h1>REPERTÓRIO JL{show ? ` — ${show.nome}` : ""}</h1>
+            {show && <span>{fmtDate(show.data)}</span>}
+          </header>
           <div className="print-cols">
             {items.map((it, i) => {
               const songs = it.blocks
@@ -107,20 +94,10 @@ function Imprimir() {
                 : [it.songs];
               return (
                 <section key={it.id} className="print-block">
-                  <h2>
-                    <span>{i + 1}</span> {it.blocks ? it.blocks.nome : "Avulsa"}
-                  </h2>
-                  <ol>
-                    {songs.map((s, j) =>
-                      s ? (
-                        <li key={j}>
-                          <span className="print-song">{s.titulo}</span>
-                          {s.tom && <b className="print-tom">{s.tom}</b>}
-                          {s.observacoes && <em>{s.observacoes}</em>}
-                        </li>
-                      ) : null,
-                    )}
-                  </ol>
+                  <div className="print-num">{i + 1}</div>
+                  <ul>
+                    {songs.map((s, j) => (s ? <li key={j}>{s.titulo}</li> : null))}
+                  </ul>
                 </section>
               );
             })}

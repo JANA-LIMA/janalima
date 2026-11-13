@@ -94,19 +94,24 @@ function Imprimir() {
             {show && <span>{fmtDate(show.data)}</span>}
           </header>
           <div className="print-cols">
-            {items.map((it, i) => {
-              const songs = it.blocks
-                ? [...it.blocks.block_songs].sort((a, b) => a.position - b.position).map((b) => b.songs)
-                : [it.songs];
-              return (
-                <section key={it.id} className="print-block">
-                  <div className="print-num">{i + 1}</div>
-                  <ul>
-                    {songs.map((s, j) => (s ? <li key={j}>{s.titulo}</li> : null))}
-                  </ul>
-                </section>
-              );
-            })}
+            {[items.slice(0, Math.ceil(items.length / 2)), items.slice(Math.ceil(items.length / 2))].map((col, c) => (
+              <div key={c} className="print-col">
+                {col.map((it, k) => {
+                  const i = c === 0 ? k : Math.ceil(items.length / 2) + k;
+                  const songs = it.blocks
+                    ? [...it.blocks.block_songs].sort((a, b) => a.position - b.position).map((b) => b.songs)
+                    : [it.songs];
+                  return (
+                    <section key={it.id} className="print-block">
+                      <div className="print-num">{i + 1}</div>
+                      <ul>
+                        {songs.map((s, j) => (s ? <li key={j}>{s.titulo}</li> : null))}
+                      </ul>
+                    </section>
+                  );
+                })}
+              </div>
+            ))}
           </div>
         </div>
       </div>

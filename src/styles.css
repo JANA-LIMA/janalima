@@ -142,10 +142,14 @@
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.2;
   box-shadow: 0 0 0 8mm var(--paper);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
+.print-sheet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 .print-head { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1.5px solid var(--ink); padding-bottom: 0.2em; margin-bottom: 0.8em; font-weight: 800; font-size: 0.8em; }
 .print-head h1 { font-weight: 800; text-transform: uppercase; }
-.print-cols { column-count: 2; column-gap: 2em; }
+.print-cols { display: flex; gap: 2em; align-items: flex-start; }
+.print-col { flex: 1 1 0; min-width: 0; }
 .print-block { break-inside: avoid; display: flex; gap: 0.7em; margin-bottom: 0.5em; }
 .print-num { flex: 0 0 1.8em; background: var(--ink); color: var(--paper); display: flex; align-items: center; justify-content: center; font-weight: 800; }
 .print-block ul { padding: 0.15em 0; }

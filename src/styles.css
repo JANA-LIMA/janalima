@@ -129,3 +129,38 @@
     letter-spacing: -0.02em;
   }
 }
+
+/* Printable setlist sheet (paper colors on purpose: black on white) */
+.print-sheet {
+  --paper: #ffffff;
+  --ink: #111111;
+  --ink-soft: #555555;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 0;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.2;
+  box-shadow: 0 0 0 8mm var(--paper);
+}
+.print-head { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid var(--ink); padding-bottom: 0.4em; margin-bottom: 0.6em; }
+.print-band { font-size: 0.8em; letter-spacing: 0.2em; font-weight: 700; color: var(--ink-soft); }
+.print-head h1 { font-size: 1.6em; font-weight: 800; }
+.print-meta { text-align: right; font-size: 0.9em; }
+.print-cols { column-count: 3; column-gap: 1.2em; }
+.print-block { break-inside: avoid; margin-bottom: 0.6em; }
+.print-block h2 { font-weight: 800; font-size: 1em; text-transform: uppercase; border-bottom: 1px solid var(--ink); margin-bottom: 0.2em; }
+.print-block h2 span { display: inline-block; min-width: 1.4em; background: var(--ink); color: var(--paper); text-align: center; border-radius: 3px; margin-right: 0.3em; }
+.print-block li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 0.4em; padding: 0.08em 0; }
+.print-song { flex: 1; }
+.print-tom { border: 1.5px solid var(--ink); border-radius: 3px; padding: 0 0.3em; font-size: 0.95em; }
+.print-block em { flex-basis: 100%; font-size: 0.8em; color: var(--ink-soft); }
+
+@media print {
+  @page { size: A4; margin: 8mm; }
+  body * { visibility: hidden; }
+  .print-sheet, .print-sheet * { visibility: visible; }
+  .print-host { position: static; overflow: visible; background: none; }
+  .print-sheet { position: absolute; left: 0; top: 0; box-shadow: none; }
+  .no-print { display: none !important; }
+}

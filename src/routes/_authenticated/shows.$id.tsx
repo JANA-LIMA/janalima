@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { CalendarDays, Clock, Layers, MapPin, Music2, Pencil, Plus, Shirt, Trash2, Truck, Mic2, Share2 } from "lucide-react";
+import { CalendarDays, Clock, Layers, MapPin, Music2, Pencil, Plus, Shirt, Trash2, Truck, Mic2, Share2, Printer } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { db, fmtDate, hhmm, run, useInvalidate, useMe } from "@/lib/band";
 import { Button } from "@/components/ui/button";
@@ -182,6 +182,9 @@ function ShowPage() {
       <Button asChild variant="hero" size="lg" className="w-full text-lg">
         <Link to="/shows/$id/palco" params={{ id }}><Mic2 /> Abrir Modo Palco</Link>
       </Button>
+        <Button asChild variant="outline" className="w-full">
+          <Link to="/shows/$id/imprimir" params={{ id }}><Printer /> Imprimir setlist (PDF)</Link>
+        </Button>
 
       <Button variant="outline" className="w-full" onClick={share}>
         <Share2 /> Compartilhar no WhatsApp

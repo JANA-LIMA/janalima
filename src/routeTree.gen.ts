@@ -22,6 +22,7 @@ import { Route as AuthenticatedShowsIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedShowsIdRouteImport } from './routes/_authenticated/shows.$id'
 import { Route as AuthenticatedVideosIndexRouteImport } from './routes/_authenticated/videos.index'
 import { Route as AuthenticatedVideosIdRouteImport } from './routes/_authenticated/videos.$id'
+import { Route as AuthenticatedShowsIdImprimirRouteImport } from './routes/_authenticated/shows_.$id.imprimir'
 import { Route as AuthenticatedShowsIdPalcoRouteImport } from './routes/_authenticated/shows_.$id.palco'
 
 const IndexRoute = IndexRouteImport.update({
@@ -92,6 +93,12 @@ const AuthenticatedVideosIdRoute = AuthenticatedVideosIdRouteImport.update({
   path: '/videos/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedShowsIdImprimirRoute =
+  AuthenticatedShowsIdImprimirRouteImport.update({
+    id: '/shows_/$id/imprimir',
+    path: '/shows/$id/imprimir',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedShowsIdPalcoRoute =
   AuthenticatedShowsIdPalcoRouteImport.update({
     id: '/shows_/$id/palco',
@@ -112,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/repertorio/': typeof AuthenticatedRepertorioIndexRoute
   '/shows/': typeof AuthenticatedShowsIndexRoute
   '/videos/': typeof AuthenticatedVideosIndexRoute
+  '/shows/$id/imprimir': typeof AuthenticatedShowsIdImprimirRoute
   '/shows/$id/palco': typeof AuthenticatedShowsIdPalcoRoute
 }
 export interface FileRoutesByTo {
@@ -127,6 +135,7 @@ export interface FileRoutesByTo {
   '/repertorio': typeof AuthenticatedRepertorioIndexRoute
   '/shows': typeof AuthenticatedShowsIndexRoute
   '/videos': typeof AuthenticatedVideosIndexRoute
+  '/shows/$id/imprimir': typeof AuthenticatedShowsIdImprimirRoute
   '/shows/$id/palco': typeof AuthenticatedShowsIdPalcoRoute
 }
 export interface FileRoutesById {
@@ -144,6 +153,7 @@ export interface FileRoutesById {
   '/_authenticated/repertorio/': typeof AuthenticatedRepertorioIndexRoute
   '/_authenticated/shows/': typeof AuthenticatedShowsIndexRoute
   '/_authenticated/videos/': typeof AuthenticatedVideosIndexRoute
+  '/_authenticated/shows_/$id/imprimir': typeof AuthenticatedShowsIdImprimirRoute
   '/_authenticated/shows_/$id/palco': typeof AuthenticatedShowsIdPalcoRoute
 }
 export interface FileRouteTypes {
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
     | '/repertorio/'
     | '/shows/'
     | '/videos/'
+    | '/shows/$id/imprimir'
     | '/shows/$id/palco'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -176,6 +187,7 @@ export interface FileRouteTypes {
     | '/repertorio'
     | '/shows'
     | '/videos'
+    | '/shows/$id/imprimir'
     | '/shows/$id/palco'
   id:
     | '__root__'
@@ -192,6 +204,7 @@ export interface FileRouteTypes {
     | '/_authenticated/repertorio/'
     | '/_authenticated/shows/'
     | '/_authenticated/videos/'
+    | '/_authenticated/shows_/$id/imprimir'
     | '/_authenticated/shows_/$id/palco'
   fileRoutesById: FileRoutesById
 }
@@ -294,6 +307,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVideosIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/shows_/$id/imprimir': {
+      id: '/_authenticated/shows_/$id/imprimir'
+      path: '/shows/$id/imprimir'
+      fullPath: '/shows/$id/imprimir'
+      preLoaderRoute: typeof AuthenticatedShowsIdImprimirRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/shows_/$id/palco': {
       id: '/_authenticated/shows_/$id/palco'
       path: '/shows/$id/palco'
@@ -315,6 +335,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedRepertorioIndexRoute: typeof AuthenticatedRepertorioIndexRoute
   AuthenticatedShowsIndexRoute: typeof AuthenticatedShowsIndexRoute
   AuthenticatedVideosIndexRoute: typeof AuthenticatedVideosIndexRoute
+  AuthenticatedShowsIdImprimirRoute: typeof AuthenticatedShowsIdImprimirRoute
   AuthenticatedShowsIdPalcoRoute: typeof AuthenticatedShowsIdPalcoRoute
 }
 
@@ -329,6 +350,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedRepertorioIndexRoute: AuthenticatedRepertorioIndexRoute,
   AuthenticatedShowsIndexRoute: AuthenticatedShowsIndexRoute,
   AuthenticatedVideosIndexRoute: AuthenticatedVideosIndexRoute,
+  AuthenticatedShowsIdImprimirRoute: AuthenticatedShowsIdImprimirRoute,
   AuthenticatedShowsIdPalcoRoute: AuthenticatedShowsIdPalcoRoute,
 }
 

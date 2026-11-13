@@ -64,6 +64,11 @@ export function filtrarPorInstrumento<T extends { instrumento?: string | null }>
   return instrumento ? ms.filter((m) => m.instrumento === instrumento) : ms;
 }
 
+/** Only an admin may remove a musician from the roster. */
+export function podeExcluirMusico(me: Pick<Me, "isAdmin"> | null | undefined) {
+  return !!me?.isAdmin;
+}
+
 /** Run a supabase query and throw on error. */
 export async function run<T>(p: PromiseLike<{ data: T; error: unknown }>): Promise<NonNullable<T>> {
   const { data, error } = await p;

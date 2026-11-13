@@ -1,11 +1,21 @@
 import { useState, type ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Link2, MessageCircle, Pencil, Plus, Send } from "lucide-react";
+import { Link2, MessageCircle, Pencil, Plus, Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { db, filtrarPorInstrumento, INSTRUMENTOS, instrumentosPresentes, run, useInvalidate, useMe } from "@/lib/band";
+import { db, filtrarPorInstrumento, INSTRUMENTOS, instrumentosPresentes, podeExcluirMusico, run, useInvalidate, useMe } from "@/lib/band";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Empty, FormDialog, PageHeader, type Field } from "@/components/band/ui";
 import { cn } from "@/lib/utils";
 
@@ -140,10 +150,56 @@ function Musicos() {
                 inv();
               }}
             />
+            {podeExcluirMusico(me) && <DeleteMusico m={m} />}
           </li>
         ))}
       </ul>
     </div>
+  );
+}
+
+function DeleteMusico({ m }: { m: { id: string; nome: string } }) {
+  const inv = useInvalidate();
+  const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  const excluir = async () => {
+    setBusy(true);
+    try {
+      const { error } = await db.from("musicians").delete().eq("id", m.id);
+      if (error) throw error;
+      inv();
+      toast.success(`${m.nome} excluído`);
+      setOpen(false);
+    } catch (err) {
+      toast.error((err as Error).message ?? "Erro ao excluir");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
+        <button className="p-2 text-destructive" aria-label={`Excluir ${m.nome}`}>
+          <Trash2 className="size-4" />
+        </button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle className="font-display">Excluir {m.nome}?</AlertDialogTitle>
+          <AlertDialogDescription>
+            O cadastro sai do app e o acesso é removido na hora. Se ele tocar de novo, será preciso cadastrar novamente.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <Button variant="destructive" onClick={excluir} disabled={busy}>
+            {busy ? "Excluindo…" : "Excluir"}
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 

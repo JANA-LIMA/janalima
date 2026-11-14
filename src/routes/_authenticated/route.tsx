@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Home, Music2, Layers, CalendarDays, PlaySquare, Users, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/lib/band";
-import logoOfficial from "@/assets/logo-official.webp.asset.json";
+import logoOfficialUrl from "@/assets/logo-official.webp";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -39,7 +39,7 @@ function Layout() {
       <header className="sticky top-0 z-30 border-b bg-background/85 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
           <Link to="/inicio" aria-label="Banda Jana Lima — Início" className="flex items-center gap-2">
-            <img src={logoOfficial.url} alt="Jana Lima" className="logo-pop h-9 w-auto" />
+            <img src={logoOfficialUrl} alt="Jana Lima" className="logo-pop h-9 w-auto" />
           </Link>
           <div className="flex items-center gap-1">
             {me?.isAdmin && (

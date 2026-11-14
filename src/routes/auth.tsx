@@ -6,8 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import janaAsset from "@/assets/jana-cut.webp.asset.json";
-import logoAsset from "@/assets/logo-official.webp.asset.json";
+import janaUrl from "@/assets/jana-cut.webp";
+import logoUrl from "@/assets/logo-official.webp";
 
 type Search = { email?: string | undefined; modo?: string | undefined };
 
@@ -97,7 +97,7 @@ function AuthPage() {
 
       {/* retrato */}
       <img
-        src={janaAsset.url}
+        src={janaUrl}
         alt="Jana Lima"
         width={720}
         height={1332}
@@ -107,7 +107,7 @@ function AuthPage() {
       {/* coluna: marca + acesso */}
       <div className="relative mx-auto flex min-h-dvh w-full max-w-sm flex-col px-6 md:mr-[7%] md:ml-auto md:max-w-md md:justify-center">
         <img
-          src={logoAsset.url}
+          src={logoUrl}
           alt="Jana Lima"
           width={1200}
           height={417}

@@ -43,6 +43,7 @@ export function useStageLive(showId: string, me: Me | null | undefined) {
     if (!userId || !me?.isStaff) return;
     let disposed = false;
     let subscribed = false;
+    let needsResync = true;
     const deviceId = crypto.randomUUID();
     let generation = 0;
     const readSession = async (force = false) => {
@@ -52,7 +53,10 @@ export function useStageLive(showId: string, me: Me | null | undefined) {
       if (readError) { setConnected(false); return; }
       setSession(data);
       setConnected(subscribed && navigator.onLine);
-      if (force) setResync((value) => value + 1);
+      if (navigator.onLine && (force || needsResync)) {
+        needsResync = false;
+        setResync((value) => value + 1);
+      }
     };
     const heartbeat = async () => {
       if (disposed || !subscribed || !navigator.onLine || document.visibilityState !== "visible") return;
@@ -75,12 +79,12 @@ export function useStageLive(showId: string, me: Me | null | undefined) {
       subscribed = status === "SUBSCRIBED";
       if (disposed) return;
       if (subscribed) { void readSession(true); void heartbeat(); void readPresence(); }
-      else { setConnected(false); setMusicians(0); }
+      else { needsResync = true; setConnected(false); setMusicians(0); }
     });
     void readSession(true);
-    const offline = () => { setConnected(false); setMusicians(0); };
+    const offline = () => { needsResync = true; setConnected(false); setMusicians(0); };
     const restore = () => {
-      if (document.visibilityState === "visible" && navigator.onLine) {
+      if (navigator.onLine) {
         void readSession(true); void heartbeat(); void readPresence();
         void qc.invalidateQueries({ queryKey: ["palco", showId, userId] });
       }

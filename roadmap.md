@@ -1,5 +1,5 @@
 # Modo Palco ao vivo
-- [ ] Sessão persistente com escrita exclusiva do admin e Realtime.
-- [ ] Sincronização, navegação independente, reconexão e setlist local.
-- [ ] Contagem de músicos conectados e preservação do Wake Lock.
-- [ ] Testes de regras e verificação entre aparelhos.
+- [x] Sessão persistente com escrita exclusiva do admin e Realtime.
+- [x] Sincronização, navegação independente, reconexão e setlist local.
+- [x] Contagem de músicos conectados e preservação do Wake Lock.
+- [x] Testes de regras e verificação entre aparelhos (admin e músico autenticados, bloqueio de escrita, reconexão e expiração da presença).

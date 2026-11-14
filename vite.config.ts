@@ -8,7 +8,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 // On Netlify builds (NETLIFY=true is set by Netlify), use Nitro's official Netlify preset
 // so SSR and server functions run as Netlify Functions. Lovable builds keep the default.
-const onNetlify = process.env.NETLIFY === "true";
+const onNetlify = process.env["NETLIFY"] === "true";
 
 export default defineConfig({
   tanstackStart: {

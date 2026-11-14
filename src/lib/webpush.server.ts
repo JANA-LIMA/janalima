@@ -54,7 +54,7 @@ async function encrypt(payload: Uint8Array, p256dh: string, authSecret: string) 
 
 export type Sub = { endpoint: string; p256dh: string; auth: string };
 
-/** Returns the HTTP status from the push service (201 = ok, 404/410 = gone). */
+/** Returns the HTTP status and error body from the push service (201 = ok, 404/410 = gone). */
 export async function sendPush(sub: Sub, data: unknown, vapid: { pub: string; priv: string; subject: string }) {
   const url = new URL(sub.endpoint);
   const jwt = await vapidJwt(url.origin, vapid.pub, vapid.priv, vapid.subject);
@@ -70,5 +70,6 @@ export async function sendPush(sub: Sub, data: unknown, vapid: { pub: string; pr
     },
     body,
   });
-  return r.status;
+  const text = r.ok ? "" : (await r.text().catch(() => "")).slice(0, 500);
+  return { status: r.status, text };
 }

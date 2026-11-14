@@ -203,6 +203,50 @@ export type Database = {
         }
         Relationships: []
       }
+      push_deliveries: {
+        Row: {
+          announcement_id: string | null
+          created_at: string
+          endpoint: string
+          erro: string | null
+          id: string
+          ok: boolean
+          status: number | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          announcement_id?: string | null
+          created_at?: string
+          endpoint: string
+          erro?: string | null
+          id?: string
+          ok?: boolean
+          status?: number | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          announcement_id?: string | null
+          created_at?: string
+          endpoint?: string
+          erro?: string | null
+          id?: string
+          ok?: boolean
+          status?: number | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "push_deliveries_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "announcements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       push_subscriptions: {
         Row: {
           auth: string

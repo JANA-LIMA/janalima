@@ -36,30 +36,37 @@ async function resolve(sb: Db, a: Audience) {
   const musicians = (ms ?? []) as { id: string; user_id: string | null }[];
   const userIds = musicians.map((m) => m.user_id).filter(Boolean) as string[];
   const { data: subs } = userIds.length
-    ? await sb.from("push_subscriptions").select("user_id,endpoint,p256dh,auth").in("user_id", userIds)
+    ? await sb.from("push_subscriptions").select("user_id,endpoint,p256dh,auth,user_agent").in("user_id", userIds)
     : { data: [] };
-  return { musicians, subs: (subs ?? []) as { user_id: string; endpoint: string; p256dh: string; auth: string }[] };
+  return { musicians, subs: (subs ?? []) as SubRow[] };
 }
 
-async function deliver(subs: { user_id: string; endpoint: string; p256dh: string; auth: string }[], payload: unknown) {
-  const priv = process.env["VAPID_PRIVATE_KEY"];
-  if (!priv) throw new Error("VAPID_PRIVATE_KEY não configurada");
+type SubRow = { user_id: string; endpoint: string; p256dh: string; auth: string; user_agent?: string | null };
+
+async function deliver(sb: Db, subs: SubRow[], payload: unknown, announcementId: string | null) {
+  const priv = (process.env["VAPID_PRIVATE_KEY"] ?? "").trim();
   const { sendPush } = await import("@/lib/webpush.server");
   const vapid = { pub: VAPID_PUBLIC_KEY, priv, subject: "mailto:contato@janalima.app" };
   const ok = new Set<string>();
   const gone: string[] = [];
+  const log: { announcement_id: string | null; user_id: string; endpoint: string; user_agent: string | null; ok: boolean; status: number | null; erro: string | null }[] = [];
   await Promise.all(
     subs.map(async (s) => {
+      const base = { announcement_id: announcementId, user_id: s.user_id, endpoint: s.endpoint, user_agent: s.user_agent ?? null };
       try {
-        const st = await sendPush(s, payload, vapid);
-        if (st >= 200 && st < 300) ok.add(s.user_id);
-        else if (st === 404 || st === 410) gone.push(s.endpoint);
-        else console.error("push status", st);
+        if (!priv) throw new Error("VAPID_PRIVATE_KEY não configurada no servidor");
+        const { status, text } = await sendPush(s, payload, vapid);
+        const good = status >= 200 && status < 300;
+        if (good) ok.add(s.user_id);
+        else if (status === 404 || status === 410) gone.push(s.endpoint);
+        log.push({ ...base, ok: good, status, erro: good ? null : text || `HTTP ${status}` });
       } catch (e) {
-        console.error("push fail", e);
+        const m = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
+        log.push({ ...base, ok: false, status: null, erro: `Erro local (chave VAPID inválida?): ${m}`.slice(0, 500) });
       }
     }),
   );
+  if (log.length) await sb.from("push_deliveries").insert(log);
   if (gone.length) {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     await supabaseAdmin.from("push_subscriptions").delete().in("endpoint", gone);
@@ -99,7 +106,7 @@ export const sendAviso = createServerFn({ method: "POST" })
       .single();
     if (error) throw error;
     await sb.from("announcement_recipients").insert(musicians.map((m) => ({ announcement_id: ann.id, musician_id: m.id })));
-    const { okUsers, removed } = await deliver(subs, { title: data.titulo, body: data.mensagem, url: data.url || "/avisos", tag: ann.id });
+    const { okUsers, removed } = await deliver(sb, subs, { title: data.titulo, body: data.mensagem, url: data.url || "/avisos", tag: ann.id }, ann.id);
     const entregues = musicians.filter((m) => m.user_id && okUsers.has(m.user_id)).length;
     await sb.from("announcements").update({ total_entregues: entregues }).eq("id", ann.id);
     return { total: musicians.length, entregues, removed };
@@ -111,8 +118,9 @@ export const sendTeste = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase);
     const { data: subs } = await context.supabase
-      .from("push_subscriptions").select("user_id,endpoint,p256dh,auth").eq("user_id", context.userId);
+      .from("push_subscriptions").select("user_id,endpoint,p256dh,auth,user_agent").eq("user_id", context.userId);
     if (!subs?.length) throw new Error("Ative as notificações neste aparelho primeiro");
-    const { okUsers } = await deliver(subs, { title: `[Teste] ${data.titulo}`, body: data.mensagem, url: data.url || "/avisos" });
-    return { ok: okUsers.size > 0 };
+    const { okUsers } = await deliver(context.supabase, subs, { title: `[Teste] ${data.titulo}`, body: data.mensagem, url: data.url || "/avisos" }, null);
+    if (!okUsers.size) throw new Error("Falha no envio do teste. Veja os detalhes no histórico de Avisos.");
+    return { ok: true };
   });

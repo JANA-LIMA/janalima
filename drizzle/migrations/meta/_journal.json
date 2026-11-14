@@ -43,6 +43,13 @@
       "when": 1794686563569,
       "tag": "0005_push_delivery_log",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794697344306,
+      "tag": "0006_palco_live_sessions",
+      "breakpoints": true
     }
   ]
 }

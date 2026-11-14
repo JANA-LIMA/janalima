@@ -508,6 +508,71 @@ export type Database = {
         }
         Relationships: []
       }
+      stage_presence: {
+        Row: {
+          id: string
+          last_seen: string
+          show_id: string
+          user_id: string
+        }
+        Insert: {
+          id: string
+          last_seen?: string
+          show_id: string
+          user_id?: string
+        }
+        Update: {
+          id?: string
+          last_seen?: string
+          show_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stage_presence_show_id_fkey"
+            columns: ["show_id"]
+            isOneToOne: false
+            referencedRelation: "shows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stage_sessions: {
+        Row: {
+          active: boolean
+          current_item_id: string | null
+          show_id: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          current_item_id?: string | null
+          show_id: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          current_item_id?: string | null
+          show_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stage_sessions_current_item_id_show_id_fkey"
+            columns: ["current_item_id", "show_id"]
+            isOneToOne: false
+            referencedRelation: "setlist_items"
+            referencedColumns: ["id", "show_id"]
+          },
+          {
+            foreignKeyName: "stage_sessions_show_id_fkey"
+            columns: ["show_id"]
+            isOneToOne: true
+            referencedRelation: "shows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string

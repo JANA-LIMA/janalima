@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Home, Music2, Layers, CalendarDays, PlaySquare, Users, LogOut } from "lucide-react";
+import { Home, Music2, Layers, CalendarDays, PlaySquare, Users, LogOut, Bell } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/lib/band";
 import logoOfficialUrl from "@/assets/logo-official.webp";
@@ -32,6 +32,7 @@ function Layout() {
     { to: "/repertorio", label: "Músicas", icon: Music2, show: !!me?.isStaff },
     { to: "/blocos", label: "Blocos", icon: Layers, show: !!me?.isStaff },
     { to: "/videos", label: "Vídeos", icon: PlaySquare, show: !!me?.isStaff },
+    { to: "/avisos", label: "Avisos", icon: Bell, show: !!me?.isStaff },
   ].filter((n) => n.show);
 
   return (

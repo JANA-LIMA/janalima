@@ -4,6 +4,7 @@ import { CalendarDays, MapPin, Mic2, Plus, Music2, Layers, Users } from "lucide-
 import { supabase } from "@/integrations/supabase/client";
 import { fmtDate, hhmm, run, today, useMe } from "@/lib/band";
 import { Empty, Panel } from "@/components/band/ui";
+import { PushToggle } from "@/components/band/PushToggle";
 
 export const Route = createFileRoute("/_authenticated/inicio")({
   head: () => ({
@@ -55,6 +56,8 @@ function Inicio() {
         <p className="text-sm text-muted-foreground">Olá{me?.nome ? `, ${me.nome}` : ""} 👋</p>
         <h1 className="text-3xl font-bold">Bora pro palco</h1>
       </div>
+
+      <PushToggle compact />
 
       <section className="relative overflow-hidden rounded-3xl bg-gradient-axe p-5 text-primary-foreground shadow-glow">
         <p className="text-xs font-bold uppercase tracking-widest opacity-80">Próximo show</p>

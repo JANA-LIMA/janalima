@@ -82,7 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Banda Jana Lima" },
       { name: "description", content: "Gestão da banda de axé da cantora Jana Lima." },
-      { name: "theme-color", content: "#1f1a16" },
+      { name: "theme-color", content: "#f97316" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-title", content: "Banda Jana Lima" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },

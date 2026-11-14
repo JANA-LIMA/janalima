@@ -14,6 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      announcement_recipients: {
+        Row: {
+          announcement_id: string
+          musician_id: string
+        }
+        Insert: {
+          announcement_id: string
+          musician_id: string
+        }
+        Update: {
+          announcement_id?: string
+          musician_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "announcement_recipients_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "announcements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "announcement_recipients_musician_id_fkey"
+            columns: ["musician_id"]
+            isOneToOne: false
+            referencedRelation: "musicians"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      announcements: {
+        Row: {
+          created_at: string
+          enviado_por: string | null
+          id: string
+          mensagem: string
+          publico: string
+          titulo: string
+          total_destinatarios: number
+          total_entregues: number
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          enviado_por?: string | null
+          id?: string
+          mensagem: string
+          publico: string
+          titulo: string
+          total_destinatarios?: number
+          total_entregues?: number
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          enviado_por?: string | null
+          id?: string
+          mensagem?: string
+          publico?: string
+          titulo?: string
+          total_destinatarios?: number
+          total_entregues?: number
+          url?: string | null
+        }
+        Relationships: []
+      }
       block_songs: {
         Row: {
           block_id: string
@@ -134,6 +200,36 @@ export type Database = {
           tipo?: string
           user_id?: string | null
           whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          p256dh: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          p256dh: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          p256dh?: string
+          user_agent?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -439,6 +535,7 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: never; Returns: boolean }
+      is_announcement_recipient: { Args: { _a: string }; Returns: boolean }
       is_staff: { Args: never; Returns: boolean }
       my_musician_id: { Args: never; Returns: string }
       responder_ensaio: {

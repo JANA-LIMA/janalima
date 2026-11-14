@@ -14,3 +14,4 @@
 - The client's useMe().isStaff must mirror the database's is_staff() (admin OR own musician with ativo). Why: the UI hides tabs from that flag, so any drift locks a released musician out of screens the backend already allows.
 - Home-screen support uses a static manifest and Apple touch icon without an app-shell service worker. Why: installability is requested, but offline caching is not.
 - Netlify deploys use Nitro's netlify preset, enabled only when NETLIFY=true in vite.config.ts. Why: Lovable builds must keep the Cloudflare default.
+- Web Push uses a messaging-only worker at public/push-sw.js (no caching) and WebCrypto-based VAPID/aes128gcm in src/lib/webpush.server.ts; sends are admin-only server functions. Why: Node web-push libs don't run on Workers, and pushes are manual only.

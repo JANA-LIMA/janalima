@@ -1,7 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
 export const VAPID_PUBLIC_KEY =
-  "BOgdtF8pixTKY3GUgwFDONr9m3H0wz7w2Vo6Ow5ebBcJxLVL87GwSwRWYv9PLiw_U66BgrrTwcvrSFtEvMuGJOU";
+  "BGEuajQEPBY1-z5jX-dJsihrOj5x7_wWdq-Ma6aU1yOE7L720MgQTSirtNWUmD96FdLNHQ31G9LyK0s134FVH-o";
 
 export type PushState = "unsupported" | "ios-install" | "denied" | "off" | "on";
 

@@ -34,13 +34,13 @@ function Palco() {
   useEffect(() => {
     const reconnected = previousResync.current !== resync;
     previousResync.current = resync;
-    if (liveIdx >= 0 && (following || reconnected || me?.isAdmin)) {
+    if (liveIdx >= 0 && (following || reconnected || (me?.isAdmin && connected))) {
       setIdx(liveIdx);
       setGrid(false);
       setFollowing(true);
       scrollRef.current?.scrollTo(0, 0);
     }
-  }, [liveIdx, following, resync, me?.isAdmin, scrollRef]);
+  }, [liveIdx, following, resync, me?.isAdmin, connected, scrollRef]);
 
   // Keep the screen awake while on stage
   useEffect(() => {

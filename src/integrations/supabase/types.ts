@@ -636,6 +636,10 @@ export type Database = {
       can_see_musician: { Args: { _m: string }; Returns: boolean }
       can_see_show: { Args: { _show: string }; Returns: boolean }
       can_see_song: { Args: { _song: string }; Returns: boolean }
+      cleanup_invalid_push_subscriptions: {
+        Args: { _endpoints: string[] }
+        Returns: number
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

@@ -15,5 +15,6 @@
 - Home-screen support uses a static manifest and Apple touch icon without an app-shell service worker. Why: installability is requested, but offline caching is not.
 - Netlify deploys use Nitro's netlify preset, enabled only when NETLIFY=true in vite.config.ts. Why: Lovable builds must keep the Cloudflare default.
 - Web Push uses a messaging-only worker at public/push-sw.js (no caching) and WebCrypto-based VAPID/aes128gcm in src/lib/webpush.server.ts; sends are admin-only server functions. Why: Node web-push libs don't run on Workers, and pushes are manual only.
+- Invalid push subscriptions are cleaned through an admin-checked SECURITY DEFINER RPC on the sender's authenticated client, with best-effort server logging. Why: delivery must not depend on service credentials or fail because cleanup failed.
 - Stage mode uses RLS-protected persistent sessions and unique effect-scoped Realtime channels; presence uses per-device heartbeats with a 60-second expiry and counts distinct active musicians. Why: only admins control live blocks, reconnects recover the current state, and closed or disconnected devices stop counting.
 - Stage setlists cache per account/show for 12 hours in localStorage without service-worker caching. Why: already-open stage mode remains navigable during connection loss without mixing accounts.

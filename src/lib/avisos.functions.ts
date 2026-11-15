@@ -67,11 +67,19 @@ async function deliver(sb: Db, subs: SubRow[], payload: unknown, announcementId:
     }),
   );
   if (log.length) await sb.from("push_deliveries").insert(log);
+  let removed = 0;
   if (gone.length) {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    await supabaseAdmin.from("push_subscriptions").delete().in("endpoint", gone);
+    try {
+      const { data, error } = await sb.rpc("cleanup_invalid_push_subscriptions", { _endpoints: gone });
+      if (error) throw error;
+      removed = data ?? 0;
+    } catch (error) {
+      // Cleanup is best-effort: never mask delivery results or expose endpoints/keys in logs.
+      const code = typeof error === "object" && error !== null && "code" in error ? String(error.code) : "unknown";
+      console.error("[push] Falha na limpeza de inscrições inválidas", { code, total: gone.length });
+    }
   }
-  return { okUsers: ok, removed: gone.length };
+  return { okUsers: ok, removed };
 }
 
 export const previewAviso = createServerFn({ method: "POST" })

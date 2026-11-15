@@ -12,7 +12,10 @@ self.addEventListener("push", (event) => {
       icon: "/icon-192.png",
       badge: "/icon-192.png",
       data: { url: d.url || "/inicio" },
-      tag: d.tag || undefined,
+      tag: d.tag || `aviso-${Date.now()}`,
+      renotify: true,
+      requireInteraction: false,
+      vibrate: [200, 100, 200],
     }),
   );
 });

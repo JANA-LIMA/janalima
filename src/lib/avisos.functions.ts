@@ -57,7 +57,7 @@ async function deliver(sb: Db, subs: SubRow[], payload: unknown, announcementId:
         if (!priv) throw new Error("VAPID_PRIVATE_KEY não configurada no servidor");
         const { status, text } = await sendPush(s, payload, vapid);
         const good = status >= 200 && status < 300;
-        if (good) ok.add(s.user_id);
+        if (status === 201) ok.add(s.user_id);
         else if (status === 404 || status === 410) gone.push(s.endpoint);
         log.push({ ...base, ok: good, status, erro: good ? null : text || `HTTP ${status}` });
       } catch (e) {
@@ -128,7 +128,7 @@ export const sendTeste = createServerFn({ method: "POST" })
     const { data: subs } = await context.supabase
       .from("push_subscriptions").select("user_id,endpoint,p256dh,auth,user_agent").eq("user_id", context.userId);
     if (!subs?.length) throw new Error("Ative as notificações neste aparelho primeiro");
-    const { okUsers } = await deliver(context.supabase, subs, { title: `[Teste] ${data.titulo}`, body: data.mensagem, url: data.url || "/avisos" }, null);
+    const { okUsers } = await deliver(context.supabase, subs, { title: `[Teste] ${data.titulo}`, body: data.mensagem, url: data.url || "/avisos", tag: `teste-${Date.now()}` }, null);
     if (!okUsers.size) throw new Error("Falha no envio do teste. Veja os detalhes no histórico de Avisos.");
     return { ok: true };
   });

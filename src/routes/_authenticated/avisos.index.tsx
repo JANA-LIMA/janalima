@@ -70,7 +70,9 @@ function device(ua: string | null, endpoint: string) {
   return `${so} · ${svc}`;
 }
 
-function Linhas({ rows }: { rows: Entrega[] }) {
+function Linhas({ rows: all }: { rows: Entrega[] }) {
+  // Hide subscriptions removed as invalid (404/410) and list successes first.
+  const rows = all.filter((r) => r.status !== 404 && r.status !== 410).sort((a, b) => Number(b.ok) - Number(a.ok));
   const { data: nomes = {} } = useQuery({
     queryKey: ["entregas-nomes"],
     queryFn: async () => {
@@ -104,7 +106,7 @@ function Entregas({ id }: { id: string }) {
   });
   return (
     <details className="w-full">
-      <summary className="cursor-pointer font-semibold text-primary">Status por aparelho ({data.filter((d) => d.ok).length}/{data.length})</summary>
+      <summary className="cursor-pointer font-semibold text-primary">Status por aparelho ({data.filter((d) => d.status === 201).length}/{data.filter((d) => d.status !== 404 && d.status !== 410).length})</summary>
       <Linhas rows={data as Entrega[]} />
     </details>
   );

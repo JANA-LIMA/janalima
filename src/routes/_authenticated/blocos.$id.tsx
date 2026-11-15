@@ -102,7 +102,7 @@ function BlockPage() {
               initial={block}
               trigger={<Button size="icon" variant="outline" aria-label="Editar"><Pencil /></Button>}
               onSubmit={async (v) => {
-                const { error } = await db.from("blocks").update(v).eq("id", id);
+                const { error } = await db.from("blocks").update({ ...v, nome: v.nome?.trim() || "Bloco" }).eq("id", id);
                 if (error) throw error;
                 inv();
               }}

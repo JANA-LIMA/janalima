@@ -10,7 +10,7 @@ export const songFields: Field[] = [
 ];
 
 export const blockFields: Field[] = [
-  { name: "nome", label: "Nome do bloco", required: true },
+  { name: "nome", label: "Nome do bloco (opcional)", placeholder: "Ex: Axé Retrô, Lentas" },
   { name: "duracao", label: "Duração", placeholder: "Ex: 12:30" },
   { name: "observacoes", label: "Observações", type: "textarea" },
 ];

@@ -4,7 +4,8 @@ import { ChevronLeft, ChevronRight, LayoutGrid, X, Radio, Square, Users, WifiOff
 import { useMe } from "@/lib/band";
 import { Button } from "@/components/ui/button";
 import { useStageLive } from "@/hooks/use-stage-live";
-import { liveIndex, type StageItem, type StageSong } from "@/lib/stage";
+import { liveIndex, type StageSong } from "@/lib/stage";
+import { setlistLabel, setlistNumber } from "@/lib/setlist";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/shows_/$id/palco")({
@@ -68,8 +69,6 @@ function Palco() {
     };
   }, []);
 
-  const label = (it?: StageItem) => (it ? (it.blocks?.nome ?? it.songs?.titulo ?? "") : "");
-  const short = (it: StageItem, i: number) => it.blocks?.nome.match(/\d+/)?.[0] ?? String(i + 1);
   const currentIdx = Math.max(0, Math.min(idx, items.length - 1));
   const cur = items[currentIdx];
   const next = items[currentIdx + 1];
@@ -101,7 +100,7 @@ function Palco() {
           onClick={() => setGrid((g) => !g)}
           className="h-auto min-w-0 flex-1 whitespace-normal py-2 text-xl font-extrabold sm:text-2xl"
         >
-          <LayoutGrid className="size-5" /> {label(cur) || (loading ? "Carregando…" : "Setlist vazio")}
+          <LayoutGrid className="size-5" /> {setlistLabel(cur, currentIdx) || (loading ? "Carregando…" : "Setlist vazio")}
         </Button>
         <span className="w-10 text-center text-sm font-bold text-muted-foreground">
           {items.length ? `${currentIdx + 1}/${items.length}` : ""}
@@ -128,14 +127,14 @@ function Palco() {
               key={it.id}
               onClick={() => void go(i)}
               disabled={busy}
-              aria-label={`Ir para ${label(it)}`}
+              aria-label={`Ir para ${setlistLabel(it, i)}`}
               aria-current={i === currentIdx ? "true" : undefined}
               className={cn(
                 "h-20 font-display text-3xl font-extrabold",
                 i === currentIdx ? "border-primary bg-primary text-primary-foreground" : "bg-card",
               )}
             >
-              {short(it, i)}
+              {String(setlistNumber(i)).padStart(2, "0")}
             </Button>
           ))}
         </div>
@@ -159,10 +158,10 @@ function Palco() {
 
       <footer className="shrink-0 border-t p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         {active && !following && liveIdx >= 0 && <Button className="mb-3 h-auto min-h-11 w-full whitespace-normal" onClick={() => { setFollowing(true); setIdx(liveIdx); setGrid(false); scrollRef.current?.scrollTo(0, 0); }}>
-          <Radio />Voltar ao vivo · {label(items[liveIdx])}
+          <Radio />Voltar ao vivo · {setlistLabel(items[liveIdx], liveIdx)}
         </Button>}
         <p className="mb-2 text-center text-sm text-muted-foreground">
-          A seguir: <b className="text-foreground">{next ? label(next) : "fim do show"}</b>
+          A seguir: <b className="text-foreground">{next ? setlistLabel(next, currentIdx + 1) : "fim do show"}</b>
         </p>
         <div className="grid grid-cols-2 gap-2">
           <Button variant="outline" disabled={currentIdx === 0 || busy} onClick={() => void go(currentIdx - 1)} className="h-16 gap-1 bg-card text-lg font-bold">

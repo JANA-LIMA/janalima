@@ -5,6 +5,7 @@ import { Printer, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { fmtDate, run } from "@/lib/band";
 import { Button } from "@/components/ui/button";
+import { setlistNumber } from "@/lib/setlist";
 
 export const Route = createFileRoute("/_authenticated/shows_/$id/imprimir")({
   head: () => ({
@@ -103,7 +104,7 @@ function Imprimir() {
                     : [it.songs];
                   return (
                     <section key={it.id} className="print-block">
-                      <div className="print-num">{i + 1}</div>
+                      <div className="print-num">{setlistNumber(i)}</div>
                       <ul>
                         {songs.map((s, j) => (s ? <li key={j}>{s.titulo}</li> : null))}
                       </ul>

@@ -43,7 +43,7 @@ function Blocos() {
               fields={blockFields}
               trigger={<Button variant="hero" size="sm"><Plus /> Novo</Button>}
               onSubmit={async (v) => {
-                const { data, error } = await db.from("blocks").insert(v).select("id").single();
+                const { data, error } = await db.from("blocks").insert({ ...v, nome: v.nome?.trim() || "Bloco" }).select("id").single();
                 if (error) throw error;
                 inv();
                 navigate({ to: "/blocos/$id", params: { id: data.id } });

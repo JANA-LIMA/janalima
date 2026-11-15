@@ -7,6 +7,7 @@ import { db, fmtDate, hhmm, run, useInvalidate, useMe } from "@/lib/band";
 import { Button } from "@/components/ui/button";
 import { Empty, FormDialog, Panel, SortableList } from "@/components/band/ui";
 import { rehearsalFields, showFields } from "@/components/band/fields";
+import { setlistLabel } from "@/lib/setlist";
 
 export const Route = createFileRoute("/_authenticated/shows/$id")({
   head: () => ({
@@ -100,7 +101,7 @@ function ShowPage() {
       ...items.flatMap((it, i) =>
         it.blocks
           ? [
-              `${i + 1}. ${it.blocks.nome}`,
+               setlistLabel(it, i),
               ...[...it.blocks.block_songs]
                 .sort((a, b) => a.position - b.position)
                 .map((bs) => `   • ${bs.songs?.titulo}${bs.songs?.tom ? ` (${bs.songs.tom})` : ""}`),
@@ -199,12 +200,12 @@ function ShowPage() {
           onReorder={reorder}
           render={(it, i) => (
             <div className="flex items-start gap-3">
-              <span className="mt-0.5 w-5 text-sm font-bold text-muted-foreground">{i + 1}</span>
+              {!it.blocks && <span className="mt-0.5 w-5 text-sm font-bold text-muted-foreground">{i + 1}</span>}
               <div className="min-w-0 flex-1">
                 {it.blocks ? (
                   <>
                     <Link to="/blocos/$id" params={{ id: it.blocks.id }} className="flex items-center gap-1 font-semibold">
-                      <Layers className="size-4 text-primary" /> {it.blocks.nome}
+                      <Layers className="size-4 shrink-0 text-primary" /> {setlistLabel(it, i)}
                     </Link>
                     <p className="text-xs text-muted-foreground">
                       {[...it.blocks.block_songs].sort((a, b) => a.position - b.position).map((b) => b.songs?.titulo).join(" → ")}

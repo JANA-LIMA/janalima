@@ -18,7 +18,7 @@ import { sendAviso, sendTeste } from "@/lib/avisos.functions";
 
 function setup(cleanup: "ok" | "error" | "throw" = "ok") {
   vi.stubEnv("VAPID_PRIVATE_KEY", "test-only-key");
-  const entries = [201, 404, 410, 500].map((status) => ({ user_id: "admin", endpoint: `https://push.example/${status}`, p256dh: "test", auth: "test" }));
+  const entries = [201, 403, 404, 410, 500].map((status) => ({ user_id: "admin", endpoint: `https://push.example/${status}`, p256dh: "test", auth: "test" }));
   const insert = vi.fn(() => ({ select: () => ({ single: async () => ({ data: { id: "announcement" }, error: null }) }) }));
   sb.from.mockImplementation((table: string) => {
     if (table === "push_subscriptions") return { select: () => ({ eq: async () => ({ data: entries }), in: async () => ({ data: entries }) }) };
@@ -29,7 +29,7 @@ function setup(cleanup: "ok" | "error" | "throw" = "ok") {
   sb.rpc.mockImplementation(async (name: string) => {
     if (name === "is_admin") return { data: true };
     if (cleanup === "throw") throw new Error("Network failure");
-    return cleanup === "error" ? { data: null, error: { code: "42501", message: "denied" } } : { data: 2, error: null };
+    return cleanup === "error" ? { data: null, error: { code: "42501", message: "denied" } } : { data: 3, error: null };
   });
   sendPush.mockImplementation(async (s: { endpoint: string }) => ({ status: Number(s.endpoint.split("/").pop()), text: "push response" }));
 }
@@ -37,17 +37,17 @@ function setup(cleanup: "ok" | "error" | "throw" = "ok") {
 afterEach(() => { vi.resetAllMocks(); vi.unstubAllEnvs(); vi.restoreAllMocks(); });
 
 describe("Limpeza de inscrições push", () => {
-  it("cleans only 404 and 410 through the authenticated RPC and preserves successful delivery", async () => {
+  it("cleans 403, 404 and 410 through the authenticated RPC and preserves successful delivery", async () => {
     setup();
     const result = await sendAviso({ data: { titulo: "Teste", mensagem: "Teste", audience: { tipo: "todos" }, publico: "Todos" } });
-    expect(sb.rpc).toHaveBeenCalledWith("cleanup_invalid_push_subscriptions", { _endpoints: ["https://push.example/404", "https://push.example/410"] });
-    expect(result).toEqual({ total: 1, entregues: 1, removed: 2 });
+    expect(sb.rpc).toHaveBeenCalledWith("cleanup_invalid_push_subscriptions", { _endpoints: ["https://push.example/403", "https://push.example/404", "https://push.example/410"] });
+    expect(result).toEqual({ total: 1, entregues: 1, removed: 3 });
   });
   it.each(["error", "throw"] as const)("logs %s cleanup failures without failing the send", async (failure) => {
     setup(failure);
     const log = vi.spyOn(console, "error").mockImplementation(() => {});
     await expect(sendTeste({ data: { titulo: "Teste", mensagem: "Teste" } })).resolves.toEqual({ ok: true });
-    expect(log).toHaveBeenCalledWith("[push] Falha na limpeza de inscrições inválidas", { code: failure === "error" ? "42501" : "unknown", total: 2 });
+    expect(log).toHaveBeenCalledWith("[push] Falha na limpeza de inscrições inválidas", { code: failure === "error" ? "42501" : "unknown", total: 3 });
   });
   it("rejects a non-admin before delivery or cleanup", async () => {
     setup();

@@ -58,7 +58,7 @@ async function deliver(sb: Db, subs: SubRow[], payload: unknown, announcementId:
         const { status, text } = await sendPush(s, payload, vapid);
         const good = status >= 200 && status < 300;
         if (status === 201) ok.add(s.user_id);
-        else if (status === 404 || status === 410) gone.push(s.endpoint);
+        else if ([400, 401, 403, 404, 410].includes(status)) gone.push(s.endpoint);
         log.push({ ...base, ok: good, status, erro: good ? null : text || `HTTP ${status}` });
       } catch (e) {
         const m = e instanceof Error ? `${e.name}: ${e.message}` : String(e);

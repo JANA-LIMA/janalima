@@ -21,6 +21,7 @@ export const Route = createFileRoute("/_authenticated/avisos/")({
   component: Avisos,
 });
 
+const GONE = [400, 401, 403, 404, 410];
 function Avisos() {
   const { data: me } = useMe();
   const { data: avisos = [] } = useQuery({
@@ -71,8 +72,8 @@ function device(ua: string | null, endpoint: string) {
 }
 
 function Linhas({ rows: all }: { rows: Entrega[] }) {
-  // Hide subscriptions removed as invalid (404/410) and list successes first.
-  const rows = all.filter((r) => r.status !== 404 && r.status !== 410).sort((a, b) => Number(b.ok) - Number(a.ok));
+  // Hide subscriptions removed as invalid (400/401/403/404/410) and list successes first.
+  const rows = all.filter((r) => !GONE.includes(r.status ?? 0)).sort((a, b) => Number(b.ok) - Number(a.ok));
   const { data: nomes = {} } = useQuery({
     queryKey: ["entregas-nomes"],
     queryFn: async () => {
@@ -106,7 +107,7 @@ function Entregas({ id }: { id: string }) {
   });
   return (
     <details className="w-full">
-      <summary className="cursor-pointer font-semibold text-primary">Status por aparelho ({data.filter((d) => d.status === 201).length}/{data.filter((d) => d.status !== 404 && d.status !== 410).length})</summary>
+      <summary className="cursor-pointer font-semibold text-primary">Status por aparelho ({data.filter((d) => d.status === 201).length}/{data.filter((d) => !GONE.includes(d.status ?? 0)).length})</summary>
       <Linhas rows={data as Entrega[]} />
     </details>
   );
